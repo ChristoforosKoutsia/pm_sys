@@ -1,0 +1,121 @@
+\hypertarget{classdata__storage_1_1_j_s_o_n_file_data_object}{}\doxysection{JSONFile\+Data\+Object Class Reference}
+\label{classdata__storage_1_1_j_s_o_n_file_data_object}\index{JSONFileDataObject@{JSONFileDataObject}}
+
+
+Local imports needed \#.  
+
+
+Inheritance diagram for JSONFile\+Data\+Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classdata__storage_1_1_j_s_o_n_file_data_object}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classdata__storage_1_1_j_s_o_n_file_data_object_aa511875787e34bfd2d1fafb77eef46a0}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self,(UUID, str, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a8f7f67ff2cb7a0661faadd4c12ae48d1}{oid}}=None,(datetime, str, float, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a485c9f10f928c880e4c699e8b3f693bb}{created}}=None,(datetime, str, float, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_aa2029e3a23e8faf828755711e1afd526}{modified}}=None,(bool, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a4e27d92f3912bc5fe969a12652b4fd02}{is\+\_\+active}}=None,(bool, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a5b82540d6c015d4c7457308f1964c4b7}{is\+\_\+deleted}}=None,(bool, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a11a064c92f179b2a2fb7751f8c86236f}{is\+\_\+dirty}}=None,(bool, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_ad851d67cbb039ab44f41f661f2c8928b}{is\+\_\+new}}=None)
+\begin{DoxyCompactList}\small\item\em Property-\/getter methods \#. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classdata__storage_1_1_j_s_o_n_file_data_object_a564562f082521e37c7029e239abb56c6}{save}} (self)
+\begin{DoxyCompactList}\small\item\em Saves the instance\textquotesingle{}s state-\/data to the back-\/end data-\/store by creating it if the instance is new, or updating it if the instance is dirty. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classdata__storage_1_1_j_s_o_n_file_data_object_ab3f97a4214270b8d8993a170432b8042}{delete}} (cls, $\ast$oids)
+\begin{DoxyCompactList}\small\item\em Performs an ACTUAL record deletion from the back-\/end data-\/store of all records whose unique identifiers have been provided. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classdata__storage_1_1_j_s_o_n_file_data_object_a762accb9fc12167e3e27d070d4fac9dc}{get}} (cls, $\ast$oids, $\ast$$\ast$criteria)
+\begin{DoxyCompactList}\small\item\em Finds and returns all instances of the class from the back-\/end data-\/store whose oids are provided and/or that match the supplied criteria. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Local imports needed \#. 
+
+Initialization needed before member \# definition can take place \#
+
+Module-\/level Constants \#
+
+Custom Exceptions \#
+
+Module functions \#
+
+ABC \char`\"{}interface\char`\"{} classes \#
+
+Abstract classes \#
+
+Provides baseline functionality, interface requirements, and type-\/identity for objects that can persist their state-\/data as JSON files in a local file-\/system file-\/cache 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdata__storage_1_1_j_s_o_n_file_data_object_aa511875787e34bfd2d1fafb77eef46a0}\label{classdata__storage_1_1_j_s_o_n_file_data_object_aa511875787e34bfd2d1fafb77eef46a0}} 
+\index{JSONFileDataObject@{JSONFileDataObject}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!JSONFileDataObject@{JSONFileDataObject}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def \+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{(UUID, str, None) }]{oid = {\ttfamily None},  }\item[{(datetime, str, float, int, None) }]{created = {\ttfamily None},  }\item[{(datetime, str, float, int, None) }]{modified = {\ttfamily None},  }\item[{(bool, int, None) }]{is\+\_\+active = {\ttfamily None},  }\item[{(bool, int, None) }]{is\+\_\+deleted = {\ttfamily None},  }\item[{(bool, int, None) }]{is\+\_\+dirty = {\ttfamily None},  }\item[{(bool, int, None) }]{is\+\_\+new = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Property-\/getter methods \#. 
+
+Property-\/setter methods \#
+
+Property-\/deleter methods \#
+
+Instance property definitions \#
+
+Object initialization \#
+
+Object initialization. self .............. (\mbox{\hyperlink{classdata__storage_1_1_j_s_o_n_file_data_object}{JSONFile\+Data\+Object}} instance, required) The instance to execute against oid ............... (UUID$\vert$str, optional, defaults to None) created ........... (datetime$\vert$str$\vert$float$\vert$int, optional, defaults to None) modified .......... (datetime$\vert$str$\vert$float$\vert$int, optional, defaults to None) is\+\_\+active ......... (bool$\vert$int, optional, defaults to None) is\+\_\+deleted ........ (bool$\vert$int, optional, defaults to None) is\+\_\+dirty .......... (bool$\vert$int, optional, defaults to None) is\+\_\+new ............ (bool$\vert$int, optional, defaults to None) 
+
+Reimplemented from \mbox{\hyperlink{classdata__objects_1_1_base_data_object_aa511875787e34bfd2d1fafb77eef46a0}{Base\+Data\+Object}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{classuser__objects_1_1_expense_a9a338810c17eb1fa50b985a986c7e2a2}{Expense}}, and \mbox{\hyperlink{classuser__objects_1_1_user_a56d0a7bcdbe9ea61016d0030b21f538b}{User}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classdata__storage_1_1_j_s_o_n_file_data_object_ab3f97a4214270b8d8993a170432b8042}\label{classdata__storage_1_1_j_s_o_n_file_data_object_ab3f97a4214270b8d8993a170432b8042}} 
+\index{JSONFileDataObject@{JSONFileDataObject}!delete@{delete}}
+\index{delete@{delete}!JSONFileDataObject@{JSONFileDataObject}}
+\doxysubsubsection{\texorpdfstring{delete()}{delete()}}
+{\footnotesize\ttfamily def delete (\begin{DoxyParamCaption}\item[{}]{cls,  }\item[{$\ast$}]{oids }\end{DoxyParamCaption})}
+
+
+
+Performs an ACTUAL record deletion from the back-\/end data-\/store of all records whose unique identifiers have been provided. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classdata__objects_1_1_base_data_object_ab3f97a4214270b8d8993a170432b8042}{Base\+Data\+Object}}.
+
+\mbox{\Hypertarget{classdata__storage_1_1_j_s_o_n_file_data_object_a762accb9fc12167e3e27d070d4fac9dc}\label{classdata__storage_1_1_j_s_o_n_file_data_object_a762accb9fc12167e3e27d070d4fac9dc}} 
+\index{JSONFileDataObject@{JSONFileDataObject}!get@{get}}
+\index{get@{get}!JSONFileDataObject@{JSONFileDataObject}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily def get (\begin{DoxyParamCaption}\item[{}]{cls,  }\item[{$\ast$}]{oids,  }\item[{$\ast$$\ast$}]{criteria }\end{DoxyParamCaption})}
+
+
+
+Finds and returns all instances of the class from the back-\/end data-\/store whose oids are provided and/or that match the supplied criteria. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a762accb9fc12167e3e27d070d4fac9dc}{Base\+Data\+Object}}.
+
+\mbox{\Hypertarget{classdata__storage_1_1_j_s_o_n_file_data_object_a564562f082521e37c7029e239abb56c6}\label{classdata__storage_1_1_j_s_o_n_file_data_object_a564562f082521e37c7029e239abb56c6}} 
+\index{JSONFileDataObject@{JSONFileDataObject}!save@{save}}
+\index{save@{save}!JSONFileDataObject@{JSONFileDataObject}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily def save (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Saves the instance\textquotesingle{}s state-\/data to the back-\/end data-\/store by creating it if the instance is new, or updating it if the instance is dirty. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a564562f082521e37c7029e239abb56c6}{Base\+Data\+Object}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+pm\+\_\+sys\+\_\+user/src/\mbox{\hyperlink{data__storage_8py}{data\+\_\+storage.\+py}}\end{DoxyCompactItemize}

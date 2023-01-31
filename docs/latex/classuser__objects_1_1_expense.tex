@@ -1,0 +1,252 @@
+\hypertarget{classuser__objects_1_1_expense}{}\doxysection{Expense Class Reference}
+\label{classuser__objects_1_1_expense}\index{Expense@{Expense}}
+
+
+Represents an expense entity of the corresponding business.  
+
+
+Inheritance diagram for Expense\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classuser__objects_1_1_expense}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classuser__objects_1_1_expense_a9a338810c17eb1fa50b985a986c7e2a2}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classuser__objects_1_1_expense_a71494cb32e3acaab23cde05f1136df5e}{category}}, \mbox{\hyperlink{classuser__objects_1_1_expense_a9dd2836b0a211a257c17b7c5c453ef1b}{type\+\_\+of\+\_\+charge}}, \mbox{\hyperlink{classuser__objects_1_1_expense_a4dd5ee47dc4a408b73089ec6f8160083}{price}}, \mbox{\hyperlink{classuser__objects_1_1_expense_ae30232c921f3d6599b75460cc9fdbd43}{non\+\_\+taxable\+\_\+price}}, \mbox{\hyperlink{classuser__objects_1_1_expense_a916158a12883308eb40a06c4edad6e8e}{vat}},(UUID, str, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a8f7f67ff2cb7a0661faadd4c12ae48d1}{oid}}=None,(datetime, str, float, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a485c9f10f928c880e4c699e8b3f693bb}{created}}=None,(datetime, str, float, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_aa2029e3a23e8faf828755711e1afd526}{modified}}=None,(bool, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a4e27d92f3912bc5fe969a12652b4fd02}{is\+\_\+active}}=None,(bool, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a5b82540d6c015d4c7457308f1964c4b7}{is\+\_\+deleted}}=None,(bool, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a11a064c92f179b2a2fb7751f8c86236f}{is\+\_\+dirty}}=None,(bool, int, None) \mbox{\hyperlink{classdata__objects_1_1_base_data_object_ad851d67cbb039ab44f41f661f2c8928b}{is\+\_\+new}}=None)
+\begin{DoxyCompactList}\small\item\em Object initialization \#. \end{DoxyCompactList}\item 
+(bool,) \mbox{\hyperlink{classuser__objects_1_1_expense_a84b42c2e3d7ab6a54f424bdb0fbcd2d1}{matches}} (self, $\ast$$\ast$criteria)
+\begin{DoxyCompactList}\small\item\em Instance methods \#. \end{DoxyCompactList}\item 
+(dict,) \mbox{\hyperlink{classuser__objects_1_1_expense_a5a5f37f956a4c51dd39ccc2758106085}{to\+\_\+data\+\_\+dict}} (self)
+\begin{DoxyCompactList}\small\item\em Returns a dictionary representation of the instance which can be used to generate data-\/store records, or for criteria-\/matching with the matches\textquotesingle{} method. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classuser__objects_1_1_expense_a86fca73622747e977ca80005090bd208}{from\+\_\+data\+\_\+dict}} (cls,(dict,) data\+\_\+dict)
+\begin{DoxyCompactList}\small\item\em Creates and returns an instance of the class whose state-\/data has been populate with values from the provided data\+\_\+dict. \end{DoxyCompactList}\item 
+(list,) \mbox{\hyperlink{classuser__objects_1_1_expense_ae0e0a5db646265059147713b8eb378c4}{sort}} (cls,(list, tuple) objects,(str,) sort\+\_\+by)
+\begin{DoxyCompactList}\small\item\em Returns a list of the original objects supplied, sorted by the criteria provided. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+list \mbox{\hyperlink{classuser__objects_1_1_expense_a4ef2d7b1df24d57b911b287d9d11d904}{FIXED\+\_\+\+EXPENSE\+\_\+\+CATEGORIES}}
+\begin{DoxyCompactList}\small\item\em Class attributes/constants \#. \end{DoxyCompactList}\item 
+list \mbox{\hyperlink{classuser__objects_1_1_expense_ad5a92516047824a1f409c41a599292a7}{TYPES\+\_\+\+OF\+\_\+\+CHARGE}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classuser__objects_1_1_expense_a71494cb32e3acaab23cde05f1136df5e}{category}}
+\begin{DoxyCompactList}\small\item\em Property-\/deleter methods \#. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classuser__objects_1_1_expense_a9dd2836b0a211a257c17b7c5c453ef1b}{type\+\_\+of\+\_\+charge}}
+\item 
+\mbox{\hyperlink{classuser__objects_1_1_expense_a4dd5ee47dc4a408b73089ec6f8160083}{price}}
+\item 
+\mbox{\hyperlink{classuser__objects_1_1_expense_ae30232c921f3d6599b75460cc9fdbd43}{non\+\_\+taxable\+\_\+price}} = property(\+\_\+get\+\_\+non\+\_\+taxable\+\_\+price, \+\_\+set\+\_\+non\+\_\+taxable\+\_\+price)
+\item 
+\mbox{\hyperlink{classuser__objects_1_1_expense_a916158a12883308eb40a06c4edad6e8e}{vat}} = property(\+\_\+get\+\_\+vat, \+\_\+set\+\_\+vat)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents an expense entity of the corresponding business. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a9a338810c17eb1fa50b985a986c7e2a2}\label{classuser__objects_1_1_expense_a9a338810c17eb1fa50b985a986c7e2a2}} 
+\index{Expense@{Expense}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def \+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{category,  }\item[{}]{type\+\_\+of\+\_\+charge,  }\item[{}]{price,  }\item[{}]{non\+\_\+taxable\+\_\+price,  }\item[{}]{vat,  }\item[{(UUID, str, None) }]{oid = {\ttfamily None},  }\item[{(datetime, str, float, int, None) }]{created = {\ttfamily None},  }\item[{(datetime, str, float, int, None) }]{modified = {\ttfamily None},  }\item[{(bool, int, None) }]{is\+\_\+active = {\ttfamily None},  }\item[{(bool, int, None) }]{is\+\_\+deleted = {\ttfamily None},  }\item[{(bool, int, None) }]{is\+\_\+dirty = {\ttfamily None},  }\item[{(bool, int, None) }]{is\+\_\+new = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Object initialization \#. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classdata__storage_1_1_j_s_o_n_file_data_object_aa511875787e34bfd2d1fafb77eef46a0}{JSONFile\+Data\+Object}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a86fca73622747e977ca80005090bd208}\label{classuser__objects_1_1_expense_a86fca73622747e977ca80005090bd208}} 
+\index{Expense@{Expense}!from\_data\_dict@{from\_data\_dict}}
+\index{from\_data\_dict@{from\_data\_dict}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{from\_data\_dict()}{from\_data\_dict()}}
+{\footnotesize\ttfamily def from\+\_\+data\+\_\+dict (\begin{DoxyParamCaption}\item[{}]{cls,  }\item[{(dict,)}]{data\+\_\+dict }\end{DoxyParamCaption})}
+
+
+
+Creates and returns an instance of the class whose state-\/data has been populate with values from the provided data\+\_\+dict. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a86fca73622747e977ca80005090bd208}{Base\+Data\+Object}}.
+
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a84b42c2e3d7ab6a54f424bdb0fbcd2d1}\label{classuser__objects_1_1_expense_a84b42c2e3d7ab6a54f424bdb0fbcd2d1}} 
+\index{Expense@{Expense}!matches@{matches}}
+\index{matches@{matches}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{matches()}{matches()}}
+{\footnotesize\ttfamily  (bool,) matches (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{$\ast$$\ast$}]{criteria }\end{DoxyParamCaption})}
+
+
+
+Instance methods \#. 
+
+Compares the supplied criteria with the state-\/data values of the instance, and returns True if all instance properties specified in the criteria exist and equal the values supplied. 
+
+Reimplemented from \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a84b42c2e3d7ab6a54f424bdb0fbcd2d1}{Base\+Data\+Object}}.
+
+\mbox{\Hypertarget{classuser__objects_1_1_expense_ae0e0a5db646265059147713b8eb378c4}\label{classuser__objects_1_1_expense_ae0e0a5db646265059147713b8eb378c4}} 
+\index{Expense@{Expense}!sort@{sort}}
+\index{sort@{sort}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{sort()}{sort()}}
+{\footnotesize\ttfamily  (list,) sort (\begin{DoxyParamCaption}\item[{}]{cls,  }\item[{(list, tuple)}]{objects,  }\item[{(str,)}]{sort\+\_\+by }\end{DoxyParamCaption})}
+
+
+
+Returns a list of the original objects supplied, sorted by the criteria provided. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classdata__objects_1_1_base_data_object_ae0e0a5db646265059147713b8eb378c4}{Base\+Data\+Object}}.
+
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a5a5f37f956a4c51dd39ccc2758106085}\label{classuser__objects_1_1_expense_a5a5f37f956a4c51dd39ccc2758106085}} 
+\index{Expense@{Expense}!to\_data\_dict@{to\_data\_dict}}
+\index{to\_data\_dict@{to\_data\_dict}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{to\_data\_dict()}{to\_data\_dict()}}
+{\footnotesize\ttfamily  (dict,) to\+\_\+data\+\_\+dict (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Returns a dictionary representation of the instance which can be used to generate data-\/store records, or for criteria-\/matching with the matches\textquotesingle{} method. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classdata__objects_1_1_base_data_object_a5a5f37f956a4c51dd39ccc2758106085}{Base\+Data\+Object}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a4ef2d7b1df24d57b911b287d9d11d904}\label{classuser__objects_1_1_expense_a4ef2d7b1df24d57b911b287d9d11d904}} 
+\index{Expense@{Expense}!FIXED\_EXPENSE\_CATEGORIES@{FIXED\_EXPENSE\_CATEGORIES}}
+\index{FIXED\_EXPENSE\_CATEGORIES@{FIXED\_EXPENSE\_CATEGORIES}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{FIXED\_EXPENSE\_CATEGORIES}{FIXED\_EXPENSE\_CATEGORIES}}
+{\footnotesize\ttfamily list FIXED\+\_\+\+EXPENSE\+\_\+\+CATEGORIES\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=  [}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Λογιστική παρακολούθηση"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Διαχείριση site"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Καθαριότητα"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Συντηρήσεις"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Νερό"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Ασφάλεια επιχείρησης"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Πυρασφάλεια"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Αναλώσιμα γραφείου"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Email services"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Τηλέφωνο"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}ΕΦΚΑ"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Ενοίκιο"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}ERP"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}CLOUD"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}ANTIVIRUS"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}ΣΥΝΔΡΟΜΕΣ ΕΠΙΜΕΛΗΤΗΡΙΩΝ"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Μισθοδοσίες"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Ηλεκτρικό ρεύμα"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Συμμετοχή σε εκθέσεις"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Υπεργολαβίες"{}},}
+\DoxyCodeLine{    ]}
+
+\end{DoxyCode}
+
+
+Class attributes/constants \#. 
+
+\mbox{\Hypertarget{classuser__objects_1_1_expense_ad5a92516047824a1f409c41a599292a7}\label{classuser__objects_1_1_expense_ad5a92516047824a1f409c41a599292a7}} 
+\index{Expense@{Expense}!TYPES\_OF\_CHARGE@{TYPES\_OF\_CHARGE}}
+\index{TYPES\_OF\_CHARGE@{TYPES\_OF\_CHARGE}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{TYPES\_OF\_CHARGE}{TYPES\_OF\_CHARGE}}
+{\footnotesize\ttfamily list TYPES\+\_\+\+OF\+\_\+\+CHARGE\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=  [}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Ετήσια"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Μηνιαία"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Εβδομαδιαία"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Ημερήσια"{}},}
+\DoxyCodeLine{        \textcolor{stringliteral}{"{}Άπαξ"{}},}
+\DoxyCodeLine{    ]}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Property Documentation}
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a71494cb32e3acaab23cde05f1136df5e}\label{classuser__objects_1_1_expense_a71494cb32e3acaab23cde05f1136df5e}} 
+\index{Expense@{Expense}!category@{category}}
+\index{category@{category}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{category}{category}}
+{\footnotesize\ttfamily category\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=  property(}
+\DoxyCodeLine{        \textcolor{comment}{\# TODO: Remove setter and deleter if access is not needed}}
+\DoxyCodeLine{        \_get\_fixed\_expense\_category, \_set\_fixed\_expense\_category,}
+\DoxyCodeLine{        \textcolor{stringliteral}{'Gets, sets or deletes the month (str) of the instance'}}
+\DoxyCodeLine{    )}
+
+\end{DoxyCode}
+
+
+Property-\/deleter methods \#. 
+
+TODO -\/\texorpdfstring{$>$}{>} add deleter methods
+
+Instance property definitions \# \mbox{\Hypertarget{classuser__objects_1_1_expense_ae30232c921f3d6599b75460cc9fdbd43}\label{classuser__objects_1_1_expense_ae30232c921f3d6599b75460cc9fdbd43}} 
+\index{Expense@{Expense}!non\_taxable\_price@{non\_taxable\_price}}
+\index{non\_taxable\_price@{non\_taxable\_price}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{non\_taxable\_price}{non\_taxable\_price}}
+{\footnotesize\ttfamily non\+\_\+taxable\+\_\+price = property(\+\_\+get\+\_\+non\+\_\+taxable\+\_\+price, \+\_\+set\+\_\+non\+\_\+taxable\+\_\+price)\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a4dd5ee47dc4a408b73089ec6f8160083}\label{classuser__objects_1_1_expense_a4dd5ee47dc4a408b73089ec6f8160083}} 
+\index{Expense@{Expense}!price@{price}}
+\index{price@{price}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{price}{price}}
+{\footnotesize\ttfamily price\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=  property(}
+\DoxyCodeLine{        \textcolor{comment}{\# TODO: Remove setter and deleter if access is not needed}}
+\DoxyCodeLine{        \_get\_price, \_set\_price,}
+\DoxyCodeLine{        \textcolor{stringliteral}{'Gets, sets or deletes the taxable\_income (float) of the instance'}}
+\DoxyCodeLine{    )}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a9dd2836b0a211a257c17b7c5c453ef1b}\label{classuser__objects_1_1_expense_a9dd2836b0a211a257c17b7c5c453ef1b}} 
+\index{Expense@{Expense}!type\_of\_charge@{type\_of\_charge}}
+\index{type\_of\_charge@{type\_of\_charge}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{type\_of\_charge}{type\_of\_charge}}
+{\footnotesize\ttfamily type\+\_\+of\+\_\+charge\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=  property(}
+\DoxyCodeLine{        \textcolor{comment}{\# TODO: Remove setter and deleter if access is not needed}}
+\DoxyCodeLine{        \_get\_type\_of\_charge, \_set\_type\_of\_charge,}
+\DoxyCodeLine{        \textcolor{stringliteral}{'Gets, sets or deletes the income (float) of the instance'}}
+\DoxyCodeLine{    )}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classuser__objects_1_1_expense_a916158a12883308eb40a06c4edad6e8e}\label{classuser__objects_1_1_expense_a916158a12883308eb40a06c4edad6e8e}} 
+\index{Expense@{Expense}!vat@{vat}}
+\index{vat@{vat}!Expense@{Expense}}
+\doxysubsubsection{\texorpdfstring{vat}{vat}}
+{\footnotesize\ttfamily vat = property(\+\_\+get\+\_\+vat, \+\_\+set\+\_\+vat)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+pm\+\_\+sys\+\_\+user/src/\mbox{\hyperlink{user__objects_8py}{user\+\_\+objects.\+py}}\end{DoxyCompactItemize}
