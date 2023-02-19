@@ -3,7 +3,7 @@ import sys
 from PySide6 import QtCharts
 from validators import MyValidator
 import user_objects
-from src.ui_py.mainwindow import Ui_MainWindow
+from src.ui_py.try_for_code_ui import Ui_MainWindow
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect,
                             QSize, QTime, QUrl, Qt, QMargins)

@@ -1,78 +1,8 @@
-
-# !/usr/bin/env python
-"""
-Provides classes and functionality to help streamline the process of 
-creating classes whose instances can persist their state-data in any 
-of several back-end data-stores.
-"""
-
-# Adapted from concepts in Brian Allbee's original Python-code blog, 
-# My Brain on Python, at
-# https://my-brain-on-python.blogspot.com/
-
-#######################################
-# Any needed from __future__ imports  #
-# Create an "__all__" list to support #
-#   "from module import member" use   #
-#######################################
-
-__all__ = [
-    # Constants
-    # Exceptions
-    # Functions
-    # ABC "interface" classes
-    # ABC abstract classes
-    'BaseDataObject',
-    # Concrete classes
-]
-
-#######################################
-# Module metadata/dunder-names        #
-#######################################
-
-__author__ = 'Brian D. Allbee'
-__copyright__ = 'Copyright 2018, all rights reserved'
-__status__ = 'Development'
-
-#######################################
-# Standard library imports needed     #
-#######################################
-
 import abc
 import inspect
-
 from datetime import datetime
 from uuid import UUID, uuid3, uuid4
 
-
-#######################################
-# Third-party imports needed          #
-#######################################
-
-#######################################
-# Local imports needed                #
-#######################################
-
-#######################################
-# Initialization needed before member #
-#   definition can take place         #
-#######################################
-
-#######################################
-# Module-level Constants              #
-#######################################
-
-#######################################
-# Custom Exceptions                   #
-#######################################
-
-#######################################
-# Module functions                    #
-#######################################
-
-#######################################
-# ABC "interface" classes             #
-#######################################
 
 class BaseDataObject(metaclass=abc.ABCMeta):
     """

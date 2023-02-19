@@ -17,10 +17,10 @@ class MyValidator(QtGui.QValidator):
         """
             This function greets the person passed in as a parameter.
 
-            :param name: The name of the person to greet
-            :type name: str
-            :return: A greeting for the person
-            :rtype: str
+            @param name: The name of the person to greet
+
+            @return: A greeting for the person
+
             """
         try:
             value = int(input_string)
