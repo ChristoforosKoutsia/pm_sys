@@ -1,0 +1,12 @@
+{
+    "category": "\u039a\u03b1\u03b8\u03b1\u03c1\u03b9\u03cc\u03c4\u03b7\u03c4\u03b1",
+    "type_of_charge": "\u0395\u03c4\u03ae\u03c3\u03b9\u03b1",
+    "price": 90,
+    "non_taxable_price": 90,
+    "vat": 90,
+    "created": "2023-03-19 20:30:16",
+    "is_active": true,
+    "is_deleted": false,
+    "modified": "2023-03-19 20:30:16",
+    "oid": "2ab46d60-4e35-460e-a3b6-e5f7f6ddc864"
+}

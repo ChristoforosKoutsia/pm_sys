@@ -1,6 +1,5 @@
 # main_window.py
 import sys
-
 import main_functionalities
 from PyQt6.QtWidgets import QApplication, QSizePolicy, QWidget, QHBoxLayout
 from PyQt6 import QtWidgets
@@ -30,7 +29,8 @@ class MainWindow(QtWidgets.QMainWindow):
         cont.set_up()
         widg = cont.get_widget()
 
-        main_functionalities.link_pages(cont.push_button_entries,cont_2.page_entries,cont_2.main_menu_selection)
+        main_functionalities.link_pages(cont.push_button_entries, cont_2.page_entries, cont_2.main_menu_selection)
+        main_functionalities.link_pages(cont.push_button_dashboard, cont_2.page_dashboard, cont_2.main_menu_selection)
         self.horizontalLayout.addWidget(cont.get_widget(), alignment=Qt.AlignmentFlag.AlignLeft)
         self.horizontalLayout.addWidget(cont_2.get_widget())
         self.setCentralWidget(self.centralwidget)
@@ -44,11 +44,12 @@ class MainWindow(QtWidgets.QMainWindow):
         '''
 
         self.resize(1205, 794)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sizePolicy)
+        self.setMinimumSize(550,450)
 
     def set_style_sheet(self):
         with open(r"C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\cfg\styles.css", "r") as file:
@@ -57,13 +58,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.centralwidget.setStyleSheet(stylesheet)
 
 
-class ExpensesStack(QtWidgets.QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setGeometry(100, 100, 250, 250)
-        self.setWindowTitle("QLabel Example")
-        label = QtWidgets.QLabel("Hello World!", self)
-        label.move(100, 100)
 
 
 app = QApplication(sys.argv)

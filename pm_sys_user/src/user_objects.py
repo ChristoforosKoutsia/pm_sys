@@ -29,6 +29,14 @@ __status__ = 'Development'
 
 from datetime import datetime
 from uuid import UUID
+import sys
+import os
+
+# Get the root directory of the project
+root_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Add the root directory to the Python search path
+sys.path.insert(0, root_dir)
 
 #######################################
 # Standard library imports needed     #
@@ -103,7 +111,9 @@ eng_2_greek = {
 #######################################
 # Concrete classes                    #
 #######################################
-class Income:
+class Income(JSONFileDataObject):
+
+    _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
     """
      Represents an income entity of the corresponding business.
      """
@@ -248,7 +258,14 @@ class Income:
     def __init__(self,
                  month,
                  income,
-                 taxable_income
+                 taxable_income,
+                 oid: (UUID, str, None) = None,
+                 created: (datetime, str, float, int, None) = None,
+                 modified: (datetime, str, float, int, None) = None,
+                 is_active: (bool, int, None) = None,
+                 is_deleted: (bool, int, None) = None,
+                 is_dirty: (bool, int, None) = None,
+                 is_new: (bool, int, None) = None,
                  ):
         """
 Object initialization.
@@ -265,12 +282,52 @@ taxable_income.......(float,requried)
         self._set_income(income)
         self._set_taxable_income(taxable_income)
 
+        JSONFileDataObject.__init__(
+            self, oid, created, modified, is_active,
+            is_deleted, is_dirty, is_new
+        )
+
+        self._set_is_dirty(False)
+
+    def matches(self, **criteria) -> (bool,):
+        return BaseDataObject.matches(self, **criteria)
+
+    def to_data_dict(self) -> (dict,):
+        return {
+            # Properties from BaseArtisan:
+            'month': self.month,
+            'income': self.income,
+            'taxable_income': self.taxable_income,
+            # - Properties from BaseDataObject (through
+            #   JSONFileDataObject)
+            'created': datetime.strftime(
+                self.created, self.__class__._data_time_string
+            ),
+            'is_active': self.is_active,
+            'is_deleted': self.is_deleted,
+            'modified': datetime.strftime(
+                self.modified, self.__class__._data_time_string
+            ),
+            'oid': str(self.oid),
+        }
+
+    @classmethod
+    def from_data_dict(cls, data_dict: (dict,)):
+        return cls(**data_dict)
+
+    @classmethod
+    def sort(cls, objects: (list, tuple), sort_by: (str,)) -> (list,):
+        """
+Returns a list of the original objects supplied, sorted by the
+criteria provided
+"""
+        raise NotImplementedError()
 
 class Expense(JSONFileDataObject):
     """
      Represents an expense entity of the corresponding business.
      """
-    _file_store_dir = r'..\data'
+    _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
     ###################################
     # Class attributes/constants      #
     ###################################

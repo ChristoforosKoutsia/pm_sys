@@ -19,7 +19,7 @@ class TestCreateFrame(unittest.TestCase):
     def test_create_frame_with_buttons(self):
         buttons = [1, 2, 3]
         add_space = 10
-        frame = menu_container_obj.create_frame(buttons, add_space)
+        frame = create_frame(buttons, add_space)
 
         self.assertIsInstance(frame, QFrame)
         self.assertEqual(frame.frameShape(), QFrame.Shape.StyledPanel)
@@ -29,7 +29,7 @@ class TestCreateFrame(unittest.TestCase):
     def test_create_frame_without_buttons(self):
         buttons = []
         add_space = 0
-        frame = menu_container_obj.create_frame(buttons, add_space)
+        frame = create_frame(buttons, add_space)
 
         self.assertIsInstance(frame, QFrame)
         self.assertEqual(frame.frameShape(), QFrame.Shape.StyledPanel)
@@ -42,7 +42,7 @@ class TestAddButton(unittest.TestCase):
         layout = QVBoxLayout()
         input_icon = 'align-justify.svg'
 
-        menu_container_obj.add_button(layout, input_icon)
+        add_button(layout, input_icon)
 
         self.assertEqual(layout.count(), 1)
         self.assertIsInstance(layout.itemAt(0).widget(), QPushButton)

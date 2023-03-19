@@ -39,41 +39,8 @@ import sys
 
 from datetime import datetime
 from uuid import UUID, uuid4
-
-#######################################
-# Third-party imports needed          #
-#######################################
-
 from data_objects import BaseDataObject
 
-
-#######################################
-# Local imports needed                #
-#######################################
-
-#######################################
-# Initialization needed before member #
-#   definition can take place         #
-#######################################
-
-#######################################
-# Module-level Constants              #
-#######################################
-
-#######################################
-# Custom Exceptions                   #
-#######################################
-
-#######################################
-# Module functions                    #
-#######################################
-
-#######################################
-# ABC "interface" classes             #
-#######################################
-
-#######################################
-# Abstract classes                    #
 #######################################
 
 class JSONFileDataObject(BaseDataObject, metaclass=abc.ABCMeta):
@@ -357,7 +324,7 @@ instance is dirty
 
     def _load_objects(cls, force_load=False):
         """
-Class-level helper-method that loads all of the objects in the
+Class-level helper-method that loads all the objects in the
 local file-system data-store into memory so that they can be
 used more quickly afterwards.
 Expected to be called by the get class-method to load objects
@@ -369,7 +336,7 @@ force_load ... (bool, optional, defaults to False) If True,
                otherwise skips the load process if data already
                exists.
 """
-        if cls._loaded_objects == None or force_load:
+        if cls._loaded_objects is None or force_load:
             if not os.path.exists(cls._file_store_dir):
                 # - If the path-specification exists, try to
                 #   assure that the *path* exists, and create it
@@ -551,8 +518,6 @@ criteria
     ###################################
     # Static methods                  #
     ###################################
-
-
 
 
 if __name__ == '__main__':
