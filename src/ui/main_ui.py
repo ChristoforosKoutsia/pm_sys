@@ -60,6 +60,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
+
 app = QApplication(sys.argv)
 window = MainWindow()
 sys.exit(app.exec())

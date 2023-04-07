@@ -6,7 +6,9 @@ from abc import ABC
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QSizePolicy, QComboBox
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QSizePolicy, QComboBox, \
+    QLineEdit
+from pm_sys_user.src import user_objects
 
 
 def link_pages(button: QPushButton, page: QtWidgets.QWidget, stacked_widget: QStackedWidget):
@@ -81,3 +83,37 @@ def expand_frame(frame: QFrame):
 
 def fill_combobox(combobox: QComboBox, items):
     combobox.addItems(items)
+
+
+class ValidateInput:
+    """
+    Abstract class to use as template for input validation
+    """
+
+    def __init__(self,attribute_name,input_class, line_edit: QLineEdit):
+        """
+           Args:
+               text: The given text from the user to be validated
+               input_class: the class that will be set from the user
+               line_edit: The Qt object of line edit to deal with (e.g change its color or whatever)
+           """
+        self.value = None
+        print(type(input_class))
+        self.input_class = input_class
+        self.data_type = type(getattr(self.input_class,attribute_name))
+        self.line_edit = line_edit
+        self.attribute_name = attribute_name
+
+    def input_validation(self,text):
+        try:
+            self.value = self.data_type(text)
+            setattr(self.input_class, self.attribute_name, self.value)
+            self.line_edit.setToolTip("")
+            self.line_edit.setStyleSheet("")
+        except ValueError as e:
+            # If the input is invalid, show an error message and set the frame color to red
+            self.line_edit.setStyleSheet("border: 2px solid red;")
+            print(e)
+            self.line_edit.setToolTip(str(e))
+
+
