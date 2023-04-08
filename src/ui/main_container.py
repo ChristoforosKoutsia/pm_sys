@@ -37,6 +37,8 @@ class BaseEntriesDesign(ABC):
         self.table_widget = None
         self.main_widget_layout = None
         self.main_widget = None
+        self.minimize_button = None
+        self.add_entry_push_button = None
 
     def set_up(self, main_widget_name: str = ''):
         self.main_widget = QtWidgets.QWidget()
@@ -111,9 +113,64 @@ class BaseEntriesDesign(ABC):
             for idx, h in enumerate(headers):
                 headers[idx] = user_objects.eng_2_greek[h]
             self.table_widget.setHorizontalHeaderLabels(headers)
-            style = "::section {""background-color: blue; radius : 12px }"
-            self.table_widget.horizontalHeader().setStyleSheet(style)
-            self.table_widget.verticalHeader().setStyleSheet(style)
+            style = "::section {""background-color: #1f232a; radius : 12px }"
+            table_style = """
+QTableWidget {
+    background-color: #2c3e50;
+    color: white;
+    gridline-color: #34495e;
+    border: none;
+    selection-background-color: #2980b9;
+    selection-color: white;
+}
+
+QHeaderView::section {
+    background-color: #34495e;
+    color: white;
+    padding: 4px;
+    border: none;
+    font-weight: bold;
+}
+
+QScrollBar:vertical {
+    background-color: #2c3e50;
+    width: 14px;
+    margin: 14px 0 14px 0;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #2980b9;
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical {
+    background-color: #2c3e50;
+    height: 14px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background-color: #2c3e50;
+    height: 14px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    border: none;
+    width: 10px;
+    height: 10px;
+    background-color: #2980b9;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background-color: #2c3e50;
+}
+            """
+            self.table_widget.setStyleSheet(table_style)
+            #self.table_widget.horizontalHeader().setStyleSheet(style)
+            #self.table_widget.verticalHeader().setStyleSheet(style)
         except IndexError:
             print("do nothing")
 
@@ -143,8 +200,7 @@ class BaseEntriesDesign(ABC):
 class ExpensesPage(BaseEntriesDesign):
     def __init__(self):
         # just define the class and nothing else
-        self.minimize_button = None
-        self.add_entry_push_button = None
+
         self.lineEdit_expense_price = None
         self.label_vat = None
         self.frame_non_taxable = None
@@ -302,14 +358,17 @@ class ExpensesPage(BaseEntriesDesign):
         try:
             new_expense_object = user_objects.Expense(self.comboBox_expense_category.currentText(),
                                                       self.comboBox_expense_type.currentText(),
-                                                      int(self.lineEdit_expense_price.text()),
-                                                      int(self.lineEdit_non_taxable.text()),
-                                                      int(self.lineEdit_vat.text()),
+                                                      float(self.lineEdit_expense_price.text()),
+                                                      float(self.lineEdit_non_taxable.text()),
+                                                      float(self.lineEdit_vat.text()),
                                                       )
             new_expense_object.save()
             self.add_item_in_table(self.table_widget, new_expense_object.to_data_dict())
         except:
-            invalid_input_message()
+            # Usage
+            msg = CustomMessageBox("Invalid input", "Please check your input",
+                                   QMessageBox.Icon.Information)
+            msg.run()
 
     def fill_expenses_comboboxes(self):
         main_functionalities.fill_combobox(self.comboBox_expense_category,
@@ -324,26 +383,154 @@ class ExpensesPage(BaseEntriesDesign):
         # minimize button shall minimize the add entry frame
         self.minimize_button.clicked.connect(lambda: main_functionalities.minimize_frame(self.frame_add_field))
 
-        # add button shall add new expense
-        # self.add_entry_push_button.clicked.connect(
-        #     lambda: self.add_item_in_table(self.table_widget, self.set_get_expense_entry()))
-
         self.add_entry_push_button.clicked.connect(lambda: self.save_expense_entry())
-
-
-# random shiiit to be deleted
-def invalid_input_message():
-    # Usage
-    msg = CustomMessageBox("Invalid input", "Please check your input",
-                           QMessageBox.Icon.Information)
-    msg.run()
 
 
 class IncomesPage(BaseEntriesDesign):
     def __init__(self):
         # just define the class and nothing else
+        self.frame_taxable = None
+        self.lineEdit_taxable = None
+        self.lineEdit_non_taxable = None
+        self.label_non_taxable = None
+        self.frame_non_taxable = None
+        self.label_value = None
+        self.frame_value = None
+        self.lineEdit_income_price = None
+        self.frame_choose_month = None
+        self.comboBox_month = None
+        self.label_month = None
+        self.frame_1 = None
         self.input_class = user_objects.Income
         self.set_up()
+        self.create_input_form()
+        self.main_widget_layout.addWidget(self.frame_add_field, alignment=Qt.AlignmentFlag.AlignCenter)
+        # input_form is ready, but we want to be invisible at the start of the program
+        main_functionalities.minimize_frame(self.frame_add_field)
+
+        # link buttons
+        self.link_buttons()
+
+        # fill comboboxes
+        self.fill_incomes_comboboxes()
+
+    def create_input_form(self):
+        # first create a frame
+        self.frame_add_field = create_frame("vertical")
+        self.frame_add_field.setObjectName("frame_add_field")
+
+        # define size policy for this form. Actually we want to be minimized by default
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.frame_add_field.setSizePolicy(sizePolicy)
+
+        # define background color so it could be visible
+        self.frame_add_field.setStyleSheet(u"\n"
+                                           "background-color: rgb(32, 38, 48)")
+
+        # create fill fields frame
+        self.frame_fill_fields = create_frame(layout="horizontal", parent_frame=self.frame_add_field)
+        self.frame_fill_fields.setObjectName(u"frame_fill_fields")
+
+        # since there are 3 fields that need to be filled we will include them in one frame
+        self.frame_1 = create_frame(parent_frame=self.frame_fill_fields)
+
+        # in this frame should be 3 other frames , one for every entry field which contain one label and an entry field
+        # choose month frame
+        self.frame_choose_month = create_frame(layout="horizontal", parent_frame=self.frame_1)
+        self.comboBox_month = QComboBox(self.frame_choose_month)
+        self.comboBox_month.setObjectName(u"comboBox=_month")
+        self.label_month = QLabel()
+        self.label_month.setObjectName(u"label_month")
+        self.label_month.setText("Μήνας")
+
+        # add widgets and add spacing for better visibility
+        self.frame_choose_month.layout().addWidget(self.label_month)
+        self.frame_choose_month.layout().addWidget(self.comboBox_month)
+        # self.frame_choose_category.layout().addSpacing(600)
+
+        # frame value
+        self.frame_value = create_frame(layout="horizontal", parent_frame=self.frame_1)
+        self.label_value = QLabel(self.frame_value)
+        self.label_value.setObjectName("label_value")
+        self.label_value.setText("Ποσό")
+        self.lineEdit_income_price = QLineEdit(self.frame_value)
+        self.lineEdit_income_price.setObjectName("lineEdit_expense_price")
+        # create dummy object
+        dummy_income = user_objects.Income("JANUARY", 50, 20)
+
+        self.lineEdit_income_price.textChanged.connect(
+            lambda text: main_functionalities.ValidateInput('income', dummy_income,
+                                                            self.lineEdit_income_price).input_validation(text))
+
+        # add widgets
+        self.frame_value.layout().addWidget(self.label_value)
+        self.frame_value.layout().addWidget(self.lineEdit_income_price)
+        # self.frame_value.layout().addSpacing(600)
+
+        # frame_taxable
+        self.frame_taxable = create_frame(layout="horizontal", parent_frame=self.frame_1)
+        self.label_taxable = QLabel(self.frame_taxable)
+        self.label_taxable.setObjectName("label_taxable")
+        self.label_taxable.setText("Αποφορολογητέο")
+        self.lineEdit_taxable = QLineEdit(self.frame_taxable)
+        self.lineEdit_taxable.setObjectName("lineEdit_taxable")
+        self.lineEdit_taxable.textChanged.connect(
+            lambda text: main_functionalities.ValidateInput('taxable_income', dummy_income,
+                                                            self.lineEdit_taxable).input_validation(text))
+
+        # add widgets
+        self.frame_taxable.layout().addWidget(self.label_taxable)
+        self.frame_taxable.layout().addWidget(self.lineEdit_taxable)
+        # self.frame_non_taxable.layout().addSpacing(600)
+
+        self.frame_1.layout().addWidget(self.frame_choose_month)
+        self.frame_1.layout().addWidget(self.frame_value)
+        self.frame_1.layout().addWidget(self.frame_taxable)
+        self.frame_fill_fields.layout().addWidget(self.frame_1, alignment=Qt.AlignmentFlag.AlignTop)
+
+        # create frame_buttons which will have just two buttons one for minimizing and one for adding
+        self.frame_buttons = create_frame(layout='horizontal', parent_frame=self.frame_add_field)
+        self.minimize_button = add_button(layout=self.frame_buttons.layout(), input_icon="chevron-left.svg")
+        self.add_entry_push_button = add_button(layout=self.frame_buttons.layout(), input_icon="plus-circle.svg")
+
+        # add all frames
+        self.frame_add_field.layout().addWidget(self.frame_fill_fields)
+        self.frame_add_field.layout().addWidget(self.frame_buttons)
+
+        # set maximum size
+        self.frame_add_field.setMaximumSize(500, 500)
+
+    def save_input_entry(self):
+        """
+        create new expense object based on user input
+        Returns: dictionary of this object
+        """
+        try:
+            new_income_object = user_objects.Income(self.comboBox_month.currentText(),
+                                                    float(self.lineEdit_income_price.text()),
+                                                    float(self.lineEdit_taxable.text()),
+                                                    )
+            new_income_object.save()
+            self.add_item_in_table(self.table_widget, new_income_object.to_data_dict())
+        except:
+            # Usage
+            msg = CustomMessageBox("Invalid input", "Please check your input",
+                                   QMessageBox.Icon.Information)
+            msg.run()
+
+    def fill_incomes_comboboxes(self):
+        main_functionalities.fill_combobox(self.comboBox_month,
+                                           user_objects.MONTHS)
+
+    def link_buttons(self):
+        # above the table there are 3 buttons add, edit and delete. We may link them with specific actions
+        # add button shall make an input form to be appeared
+        self.add_button.clicked.connect(lambda: main_functionalities.expand_frame(self.frame_add_field))
+
+        # minimize button shall minimize the add entry frame
+        self.minimize_button.clicked.connect(lambda: main_functionalities.minimize_frame(self.frame_add_field))
+
+        self.add_entry_push_button.clicked.connect(lambda: self.save_input_entry())
 
 
 class EmployeesPage(BaseEntriesDesign):
@@ -355,13 +542,13 @@ class EmployeesPage(BaseEntriesDesign):
 
 class ChartCreator(QChart):
 
-    def __init__(self, datas, parent=None):
+    def __init__(self, datas, input_class,parent=None):
         super(ChartCreator, self).__init__(parent)
         self._datas = datas
 
         self.legend().hide()
         self.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
-
+        self.input_class = input_class
         self.outer = QPieSeries()
         self.inner = QPieSeries()
         self.outer.setHoleSize(0.35)
@@ -377,7 +564,12 @@ class ChartCreator(QChart):
     def set_outer_series(self):
         slices = list()
         for data in self._datas:
-            slice_ = QPieSlice(data.category, data.price)
+            if self.input_class=="Expense":
+                slice_ = QPieSlice(data.category, data.price)
+            elif self.input_class== "Income":
+                slice_ = QPieSlice(data.month, data.income)
+            else:
+                raise ValueError(f"Input class {self.input_class}is not supported")
             slice_.setLabelVisible()
             # slice_.setColor(data.primary_color)
             # slice_.setLabelBrush(data.primary_color)
@@ -404,7 +596,12 @@ class ChartCreator(QChart):
 
     def set_inner_series(self):
         for data in self._datas:
-            slice_ = self.inner.append(data.category, data.price)
+            if self.input_class == "Expense":
+                slice_ = QPieSlice(data.category, data.price)
+            elif self.input_class == "Income":
+                slice_ = QPieSlice(data.month, data.income)
+            else:
+                raise ValueError(f"Input class {self.input_class}is not supported")
 
     def explode(self, slice_, is_hovered):
         if is_hovered:
@@ -484,7 +681,7 @@ class Pages:
         # define datas
         page_widget = QWidget()
         my_datas = user_objects.Expense.get()
-        chart = ChartCreator(my_datas)
+        chart = ChartCreator(my_datas,"Expense")
         chart.setTitle("Έξοδα")
         title = chart.title()
 
@@ -492,11 +689,25 @@ class Pages:
         chart.setTitleFont(QFont("Arial", 14))
         chart.setMargins(QMargins(0, 0, 0, 150))
         chart.setBackgroundVisible(False)
-        chart_view = QChartView(chart)
-        chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
+        chart_view_expenses = QChartView(chart)
+        chart_view_expenses.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+        page_widget = QWidget()
+        my_datas = user_objects.Income.get()
+        chart = ChartCreator(my_datas,"Income")
+        chart.setTitle("Έσοδα")
+        title = chart.title()
+
+        chart.setTitleBrush(QBrush(Qt.GlobalColor.white))
+        chart.setTitleFont(QFont("Arial", 14))
+        chart.setMargins(QMargins(0, 0, 0, 150))
+        chart.setBackgroundVisible(False)
+        chart_view_incomes = QChartView(chart)
+        chart_view_incomes.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         page_layout = QHBoxLayout(page_widget)
-        page_layout.addWidget(chart_view)
+        page_layout.addWidget(chart_view_expenses)
+        page_layout.addWidget(chart_view_incomes)
 
         return page_widget
 

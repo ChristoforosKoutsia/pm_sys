@@ -57,10 +57,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.centralwidget.setStyleSheet(stylesheet)
 
-
-
-
-
 app = QApplication(sys.argv)
 window = MainWindow()
 sys.exit(app.exec())
