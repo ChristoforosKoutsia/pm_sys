@@ -13,9 +13,10 @@ from pm_sys_user.src import user_objects
 from main_functionalities import create_frame, add_button
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QVBoxLayout, QStackedWidget, QWidget, QSizePolicy, QTableWidgetItem, QTableWidget, \
-    QComboBox, QLabel, QLineEdit, QFrame, QHBoxLayout
+    QComboBox, QLabel, QLineEdit, QFrame, QHBoxLayout, QMessageBox
 
 from src.ui import main_functionalities
+from src.ui.custom_widgets import CustomMessageBox
 
 
 class BaseEntriesDesign(ABC):
@@ -208,6 +209,14 @@ class ExpensesPage(BaseEntriesDesign):
         self.label_value.setText("Ποσό")
         self.lineEdit_expense_price = QLineEdit(self.frame_value)
         self.lineEdit_expense_price.setObjectName("lineEdit_expense_price")
+        # create dummy object
+        dummy_expense = user_objects.Expense("Λογιστική παρακολούθηση", "Μηνιαία", 100.0, 20.0, 5)
+        # create dummy object
+        dummy_price_validation_object = main_functionalities.ValidateInput('price', dummy_expense,
+                                                                           self.lineEdit_expense_price)
+        self.lineEdit_expense_price.textChanged.connect(
+            lambda text: main_functionalities.ValidateInput('price', dummy_expense,
+                                                            self.lineEdit_expense_price).input_validation(text))
 
         # add widgets
         self.frame_value.layout().addWidget(self.label_value)
@@ -221,7 +230,11 @@ class ExpensesPage(BaseEntriesDesign):
         self.label_vat.setObjectName("label_vat")
         self.label_vat.setText("ΦΠΑ")
         self.lineEdit_vat = QLineEdit(self.frame_vat)
-        self.lineEdit_expense_price.setObjectName("lineEdit_vat")
+        self.lineEdit_vat.setObjectName("lineEdit_vat")
+
+        self.lineEdit_vat.textChanged.connect(
+            lambda text: main_functionalities.ValidateInput('vat', dummy_expense, self.lineEdit_vat).input_validation(
+                text))
 
         # add widgets
         self.frame_vat.layout().addWidget(self.label_vat)
@@ -251,6 +264,9 @@ class ExpensesPage(BaseEntriesDesign):
         self.label_non_taxable.setText("Αποφορολογητέο")
         self.lineEdit_non_taxable = QLineEdit(self.frame_non_taxable)
         self.lineEdit_non_taxable.setObjectName("lineEdit_non_taxable")
+        self.lineEdit_non_taxable.textChanged.connect(
+            lambda text: main_functionalities.ValidateInput('non_taxable_price', dummy_expense,
+                                                            self.lineEdit_non_taxable).input_validation(text))
 
         # add widgets
         self.frame_non_taxable.layout().addWidget(self.label_non_taxable)
@@ -278,19 +294,22 @@ class ExpensesPage(BaseEntriesDesign):
         # set maximum size
         self.frame_add_field.setMaximumSize(500, 500)
 
-    def set_get_expense_entry(self):
+    def save_expense_entry(self):
         """
         create new expense object based on user input
         Returns: dictionary of this object
         """
-        new_expense_object = user_objects.Expense(self.comboBox_expense_category.currentText(),
-                                                  self.comboBox_expense_type.currentText(),
-                                                  int(self.lineEdit_expense_price.text()),
-                                                  int(self.lineEdit_non_taxable.text()),
-                                                  int(self.lineEdit_vat.text()),
-                                                  )
-        new_expense_object.save()
-        return new_expense_object.to_data_dict()
+        try:
+            new_expense_object = user_objects.Expense(self.comboBox_expense_category.currentText(),
+                                                      self.comboBox_expense_type.currentText(),
+                                                      int(self.lineEdit_expense_price.text()),
+                                                      int(self.lineEdit_non_taxable.text()),
+                                                      int(self.lineEdit_vat.text()),
+                                                      )
+            new_expense_object.save()
+            self.add_item_in_table(self.table_widget, new_expense_object.to_data_dict())
+        except:
+            invalid_input_message()
 
     def fill_expenses_comboboxes(self):
         main_functionalities.fill_combobox(self.comboBox_expense_category,
@@ -306,8 +325,18 @@ class ExpensesPage(BaseEntriesDesign):
         self.minimize_button.clicked.connect(lambda: main_functionalities.minimize_frame(self.frame_add_field))
 
         # add button shall add new expense
-        self.add_entry_push_button.clicked.connect(
-            lambda: self.add_item_in_table(self.table_widget, self.set_get_expense_entry()))
+        # self.add_entry_push_button.clicked.connect(
+        #     lambda: self.add_item_in_table(self.table_widget, self.set_get_expense_entry()))
+
+        self.add_entry_push_button.clicked.connect(lambda: self.save_expense_entry())
+
+
+# random shiiit to be deleted
+def invalid_input_message():
+    # Usage
+    msg = CustomMessageBox("Invalid input", "Please check your input",
+                           QMessageBox.Icon.Information)
+    msg.run()
 
 
 class IncomesPage(BaseEntriesDesign):

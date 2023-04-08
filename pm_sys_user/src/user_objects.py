@@ -49,7 +49,7 @@ sys.path.insert(0, root_dir)
 #######################################
 # Third-party imports needed          #
 #######################################
-from data_storage  import JSONFileDataObject
+from data_storage import JSONFileDataObject
 from data_storage import BaseDataObject
 
 #######################################
@@ -85,9 +85,9 @@ eng_2_greek = {
     'category': "Κατηγορία",
     'type_of_charge': "Τύπος Χρέωσης",
     'price': "Τιμή",
-    'non_taxable_price': "Αποφορολογητέο" ,
+    'non_taxable_price': "Αποφορολογητέο",
     'vat': "ΦΠΑ",
-    'is_active': "Ενεργό" ,
+    'is_active': "Ενεργό",
     'is_deleted': "Διεγραμένο",
 }
 
@@ -112,7 +112,6 @@ eng_2_greek = {
 # Concrete classes                    #
 #######################################
 class Income(JSONFileDataObject):
-
     _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
     """
      Represents an income entity of the corresponding business.
@@ -269,13 +268,10 @@ class Income(JSONFileDataObject):
                  ):
         """
 Object initialization.
-
 self .............. (Income instance, required) The instance to
                     execute against
 month.............. (str,required) The month that the income is referred to.
-
 income............. (float,required)
-
 taxable_income.......(float,requried)
 """
         self._set_month(month)
@@ -322,6 +318,7 @@ Returns a list of the original objects supplied, sorted by the
 criteria provided
 """
         raise NotImplementedError()
+
 
 class Expense(JSONFileDataObject):
     """
@@ -412,6 +409,7 @@ class Expense(JSONFileDataObject):
     def _set_price(self, value: float) -> None:
         # month should be a string and can only take values ["Jan-Dec"]
         # - Type-check: This is a required str value
+        print("My price is value")
         if type(value) not in [float, int]:
             raise TypeError(
                 '%s.income expects numeric values but instead was passed'
@@ -434,8 +432,6 @@ class Expense(JSONFileDataObject):
         self._price = value
 
     def _set_non_taxable_price(self, value: float) -> None:
-        # month should be a string and can only take values ["Jan-Dec"]
-        # - Type-check: This is a required str value
         if type(value) not in [float, int]:
             raise TypeError(
                 '%s.taxable_income expects numeric values but instead was passed'
@@ -455,10 +451,44 @@ class Expense(JSONFileDataObject):
                     type(value).__name__
                 )
             )
+        # value check (non-taxable price should be lower than price)
+        if self.price is not None and value > self.price:
+            raise ValueError(
+                "Το αποφορολογητέο ποσό πρέπει να είναι μικρότετο απο το ποσό εξόδου!"
+            )
+
         self._non_taxable_price = value
 
     def _set_vat(self, value):
-        # TODO -> improve it
+        if type(value) not in [float, int]:
+            raise TypeError(
+                '%s.taxable_income expects numeric values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(
+                '%s.vat expects non negative values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        if value > 100:
+            raise ValueError(
+                '%s.vat expects to be <100 but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+
         self._vat = value
 
     ###################################
@@ -509,11 +539,12 @@ class Expense(JSONFileDataObject):
                  is_dirty: (bool, int, None) = None,
                  is_new: (bool, int, None) = None,
                  ):
-        self._set_non_taxable_price(non_taxable_price)
-        self._set_fixed_expense_category(category)
-        self._set_type_of_charge(type_of_charge)
-        self._set_price(price)
-        self._set_vat(vat)
+        self.price = price
+        self.non_taxable_price = non_taxable_price
+        self.category = category
+        self.type_of_charge = type_of_charge
+
+        self.vat = vat
         JSONFileDataObject.__init__(
             self, oid, created, modified, is_active,
             is_deleted, is_dirty, is_new
