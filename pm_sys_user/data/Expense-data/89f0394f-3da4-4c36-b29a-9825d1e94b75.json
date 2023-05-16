@@ -1,0 +1,12 @@
+{
+    "category": "\u039b\u03bf\u03b3\u03b9\u03c3\u03c4\u03b9\u03ba\u03ae \u03c0\u03b1\u03c1\u03b1\u03ba\u03bf\u03bb\u03bf\u03cd\u03b8\u03b7\u03c3\u03b7",
+    "type_of_charge": "\u0395\u03c4\u03ae\u03c3\u03b9\u03b1",
+    "price": 900.0,
+    "non_taxable_price": 50.0,
+    "vat": 89.0,
+    "created": "2023-05-07 18:14:15",
+    "is_active": true,
+    "is_deleted": false,
+    "modified": "2023-05-07 18:14:15",
+    "oid": "89f0394f-3da4-4c36-b29a-9825d1e94b75"
+}

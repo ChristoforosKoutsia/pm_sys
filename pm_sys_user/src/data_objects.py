@@ -421,7 +421,7 @@ is_new ............ (bool|int, optional, defaults to None) A flag
             self._set_created(created)
         if modified != None:
             self._set_modified(modified)
-        if is_active != None:
+        if is_active is not None:
             self._set_is_active(is_active)
         if is_deleted != None:
             self._set_is_deleted(is_deleted)

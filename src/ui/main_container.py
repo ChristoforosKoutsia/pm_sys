@@ -11,7 +11,7 @@ from PyQt6.QtGui import QPainter, QBrush, QFont
 from pm_sys_user.src import user_objects
 
 from main_functionalities import create_frame, add_button
-from PyQt6 import QtWidgets
+from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtWidgets import QVBoxLayout, QStackedWidget, QWidget, QSizePolicy, QTableWidgetItem, QTableWidget, \
     QComboBox, QLabel, QLineEdit, QFrame, QHBoxLayout, QMessageBox
 
@@ -76,6 +76,7 @@ class BaseEntriesDesign(ABC):
 
         self.table_widget = QTableWidget()
 
+
         # set size policy to expanding
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.table_widget.setSizePolicy(sizePolicy)
@@ -104,7 +105,11 @@ class BaseEntriesDesign(ABC):
                 if flag:
                     self.table_widget.insertColumn(idx_col)
 
-                self.table_widget.setItem(idx_row, idx_col, QTableWidgetItem(str(item[1])))
+                temp_item = QTableWidgetItem(str(item[1]))
+
+                # Set the Qt.ItemIsEditable flag to allow editing
+                temp_item.setFlags(temp_item.flags() | QtCore.Qt.ItemFlag.ItemIsEditable)
+                self.table_widget.setItem(idx_row, idx_col,temp_item )
 
         # set column names
         try:
@@ -262,7 +267,7 @@ class ExpensesPage(BaseEntriesDesign):
         self.frame_value = create_frame(layout="horizontal", parent_frame=self.frame_1)
         self.label_value = QLabel(self.frame_value)
         self.label_value.setObjectName("label_value")
-        self.label_value.setText("Ποσό")
+        self.label_value.setText("Ποσό(€)")
         self.lineEdit_expense_price = QLineEdit(self.frame_value)
         self.lineEdit_expense_price.setObjectName("lineEdit_expense_price")
         # create dummy object
@@ -298,7 +303,7 @@ class ExpensesPage(BaseEntriesDesign):
 
         # and the second frame
         self.frame_2 = create_frame(parent_frame=self.frame_fill_fields)
-
+     
         # in this frame should be 2 other frames , one for every entry field which contain one label and an entry field
         # choose category frame
         self.frame_choose_type = create_frame(layout="horizontal", parent_frame=self.frame_2)
@@ -465,7 +470,6 @@ class IncomesPage(BaseEntriesDesign):
         # add widgets
         self.frame_value.layout().addWidget(self.label_value)
         self.frame_value.layout().addWidget(self.lineEdit_income_price)
-        # self.frame_value.layout().addSpacing(600)
 
         # frame_taxable
         self.frame_taxable = create_frame(layout="horizontal", parent_frame=self.frame_1)
@@ -536,7 +540,18 @@ class IncomesPage(BaseEntriesDesign):
 class EmployeesPage(BaseEntriesDesign):
     def __init__(self):
         # just define the class and nothing else
-        self.input_class = user_objects.Income
+        self.input_class = user_objects.Employee
+        self.set_up()
+
+
+
+
+
+
+class SuppliersPage(BaseEntriesDesign):
+    def __init__(self):
+        # just define the class and nothing else
+        self.input_class = user_objects.Employee
         self.set_up()
 
 

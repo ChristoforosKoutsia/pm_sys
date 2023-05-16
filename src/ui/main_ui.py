@@ -8,7 +8,6 @@ from PyQt6.QtCore import Qt
 from menu_container import MenuContainer
 from main_container import MainContainer
 
-
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -56,6 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):
             stylesheet = file.read()
 
         self.centralwidget.setStyleSheet(stylesheet)
+
 
 app = QApplication(sys.argv)
 window = MainWindow()
