@@ -508,35 +508,6 @@ criteria provided
             'as required by BaseDataObject' % (cls.__name__)
         )
 
-    ###################################
-    # Static methods                  #
-    ###################################
-
-
-#######################################
-# Abstract classes                    #
-#######################################
-
-#######################################
-# Concrete classes                    #
-#######################################
-
-#######################################
-# Initialization needed after member  #
-#   definition is complete            #
-#######################################
-
-#######################################
-# Imports needed after member         #
-#   definition (to resolve circular   #
-#   dependencies - avoid if at all    #
-#   possible                          #
-#######################################
-
-#######################################
-# Code to execute if the module is    #
-#   called directly                   #
-#######################################
 
 if __name__ == '__main__':
     pass

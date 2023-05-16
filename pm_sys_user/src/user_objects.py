@@ -27,6 +27,7 @@ __author__ = 'Koutsianoudis Christoforos'
 __copyright__ = 'Copyright 2022, all rights reserved'
 __status__ = 'Development'
 
+from abc import ABC
 from datetime import datetime
 from uuid import UUID
 import sys
@@ -74,6 +75,7 @@ MONTHS = [
     "JULY",
     "AUGUST",
 ]
+VAT_RATE = 0.24
 
 # dictionary that maps english terms to greek
 eng_2_greek = {
@@ -454,7 +456,7 @@ class Expense(JSONFileDataObject):
         # value check (non-taxable price should be lower than price)
         if self.price is not None and value > self.price:
             raise ValueError(
-                "Το αποφορολογητέο ποσό πρέπει να είναι μικρότετο απο το ποσό εξόδου!"
+                "Το αποφορολογητέο ποσό πρέπει να είναι μικρότερο απο το ποσό εξόδου!"
             )
 
         self._non_taxable_price = value
@@ -590,7 +592,348 @@ criteria provided
         raise NotImplementedError()
 
 
-class User(JSONFileDataObject, object):
+class Employee(JSONFileDataObject, ABC):
+    _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
+    """
+     Represents an income entity of the corresponding business.
+     """
+
+    TYPE_OF_EMPLOYMENT = ["ΠΛΗΡΗΣ"
+                          "ΗΜΙΑΠΑΣΧΟΛΗΣΗ"
+                          "ΠΕΡΙΟΔΙΚΗ"]
+
+    ###################################
+    # Class attributes/constants      #
+    ###################################
+
+    ###################################
+    # Property-setter methods         #
+    ###################################
+
+    def _set_name(self, value: str) -> None:
+        # name should be a string consists at least of 3 characters
+        # - Type-check: This is a required str value
+        if type(value) != str:
+            raise TypeError(
+                '%s.name expects a single-line, '
+                'non-empty str value, with no whitespace '
+                'nor spaces and accepted strings are only %s, but was passed '
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check
+        if len(value)<4:
+            raise ValueError(f"Name of employee should be at least 4 characters given name {value} is below this threshold ")
+        self._name = value
+
+    def _set_surname(self, value: str) -> None:
+        # name should be a string consists at least of 3 characters
+        # - Type-check: This is a required str value
+        if type(value) != str:
+            raise TypeError(
+                '%s.name expects a single-line, '
+                'non-empty str value, with no whitespace '
+                'nor spaces and accepted strings are only %s, but was passed '
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check
+        if len(value)<4:
+            raise ValueError(f"Name of employee should be at least 4 characters given name {value} is below this threshold ")
+        self._surname = value
+
+
+    def _set_gross_salary(self, value: float) -> None:
+        # employees salar should be either float or integer value > 0
+        # - Type-check: This is a required str value
+        if type(value) not in [float, int]:
+            raise TypeError(f"Salary should be either float or integer value")
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(f"Salary of employee should be either float or integer")
+        self._gross_salary = value
+
+    def _set_net_salary(self, value: float) -> None:
+        # employees salar should be either float or integer value > 0
+        # - Type-check: This is a required str value
+        if type(value) not in [float, int]:
+            raise TypeError(f"Salary should be either float or integer value")
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(f"Salary of employee should be either float or integer")
+        self._net_salary = value
+
+    def _set_type_of_employment(self, value: str) -> None:
+        # employees salar should be either float or integer value > 0
+        # - Type-check: This is a required str value
+        if type(value)  not in self.TYPE_OF_EMPLOYMENT :
+            raise TypeError(f"Type of employment should be in {self.TYPE_OF_EMPLOYMENT}")
+        self._type_of_employment = value
+
+    ###################################
+    # Instance property definitions   #
+    ###################################
+
+    name = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_name
+    )
+    surname = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_surname
+    )
+    gross_salary = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_gross_salary    )
+
+    net_salary = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_net_salary
+    )
+
+    type_of_employment = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_type_of_employment
+    )
+
+
+    ###################################
+    # Object initialization           #
+    ###################################
+
+    # TODO: Add and document arguments if/as needed
+    def __init__(self,
+                 name,
+                 surname,
+                 net_salary,
+                 gross_salary,
+                 type_of_employment,
+                 oid: (UUID, str, None) = None,
+                 created: (datetime, str, float, int, None) = None,
+                 modified: (datetime, str, float, int, None) = None,
+                 is_active: (bool, int, None) = None,
+                 is_deleted: (bool, int, None) = None,
+                 is_dirty: (bool, int, None) = None,
+                 is_new: (bool, int, None) = None,
+                 ):
+
+        self._set_name(name)
+        self._set_surname(surname)
+        self._set_net_salary(net_salary)
+        self._set_gross_salary (gross_salary)
+        self._type_of_employment (type_of_employment)
+
+        JSONFileDataObject.__init__(
+            self, oid, created, modified, is_active,
+            is_deleted, is_dirty, is_new
+        )
+
+        self._set_is_dirty(False)
+
+    def matches(self, **criteria) -> (bool,):
+        return BaseDataObject.matches(self, **criteria)
+
+    def to_data_dict(self) -> (dict,):
+        return {
+            # Properties from BaseArtisan:
+            'name': self.name,
+            'surname': self.surname,
+            'net_salary': self.net_salary,
+            'gross_salary': self.gross_salary,
+            'type_of_employment': self.type_of_employment,
+            # - Properties from BaseDataObject (through
+            #   JSONFileDataObject)
+            'created': datetime.strftime(
+                self.created, self.__class__._data_time_string
+            ),
+            'is_active': self.is_active,
+            'is_deleted': self.is_deleted,
+            'modified': datetime.strftime(
+                self.modified, self.__class__._data_time_string
+            ),
+            'oid': str(self.oid),
+        }
+
+    @classmethod
+    def from_data_dict(cls, data_dict: (dict,)):
+        return cls(**data_dict)
+
+    @classmethod
+    def sort(cls, objects: (list, tuple), sort_by: (str,)) -> (list,):
+        """
+Returns a list of the original objects supplied, sorted by the
+criteria provided
+"""
+        raise NotImplementedError()
+
+class Supplier(JSONFileDataObject, ABC):
+    _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
+    """
+     Represents an income entity of the corresponding business.
+     """
+    ###################################
+    # Class attributes/constants      #
+    ###################################
+
+    ###################################
+    # Property-setter methods         #
+    ###################################
+
+    def _set_name(self, value: str) -> None:
+        # name should be a string consists at least of 3 characters
+        # - Type-check: This is a required str value
+        if type(value) != str:
+            raise TypeError(
+                '%s.name expects a single-line, '
+                'non-empty str value, with no whitespace '
+                'nor spaces and accepted strings are only %s, but was passed '
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check
+        if len(value) < 4:
+            raise ValueError(
+                f"Name of supplier should be at least 4 characters given name {value} is below this threshold ")
+        self._name = value
+
+    def _set_surname(self, value: str) -> None:
+        # name should be a string consists at least of 3 characters
+        # - Type-check: This is a required str value
+        if type(value) != str:
+            raise TypeError(
+                '%s.name expects a single-line, '
+                'non-empty str value, with no whitespace '
+                'nor spaces and accepted strings are only %s, but was passed '
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check
+        if len(value) < 4:
+            raise ValueError(
+                f"Name of supplier should be at least 4 characters given name {value} is below this threshold ")
+        self._surname = value
+
+    def _set_price(self, value: float) -> None:
+        # employees salar should be either float or integer value > 0
+        # - Type-check: This is a required str value
+        if type(value) not in [float, int]:
+            raise TypeError(f"Price should be either float or integer value")
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(f"Price should be either float or integer")
+        self._price = value
+
+    def _set_non_taxable_price(self, value: float) -> None:
+        # employees salar should be either float or integer value > 0
+        # - Type-check: This is a required str value
+        if type(value) not in [float, int]:
+            raise TypeError(f"Salary should be either float or integer value")
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(f"Salary of employee should be either float or integer")
+        self._non_taxable_price = value
+
+    ###################################
+    # Instance property definitions   #
+    ###################################
+
+    name = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_name
+    )
+    surname = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_surname
+    )
+    price = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_price)
+
+    non_taxable_price = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _set_non_taxable_price
+    )
+
+    ###################################
+    # Object initialization           #
+    ###################################
+
+    # TODO: Add and document arguments if/as needed
+    def __init__(self,
+                 name,
+                 surname,
+                 price,
+                 non_taxable_price,
+                 oid: (UUID, str, None) = None,
+                 created: (datetime, str, float, int, None) = None,
+                 modified: (datetime, str, float, int, None) = None,
+                 is_active: (bool, int, None) = None,
+                 is_deleted: (bool, int, None) = None,
+                 is_dirty: (bool, int, None) = None,
+                 is_new: (bool, int, None) = None,
+                 ):
+
+        self._set_name(name)
+        self._set_surname(surname)
+        self._set_price(price)
+        self._set_non_taxable_price(non_taxable_price)
+
+        JSONFileDataObject.__init__(
+            self, oid, created, modified, is_active,
+            is_deleted, is_dirty, is_new
+        )
+
+        self._set_is_dirty(False)
+
+    def matches(self, **criteria) -> (bool,):
+        return BaseDataObject.matches(self, **criteria)
+
+    def to_data_dict(self) -> (dict,):
+        return {
+            # Properties from BaseArtisan:
+            'name': self.name,
+            'surname': self.surname,
+            'net_salary': self.net_salary,
+            'gross_salary': self.gross_salary,
+            'type_of_employment': self.type_of_employment,
+            # - Properties from BaseDataObject (through
+            #   JSONFileDataObject)
+            'created': datetime.strftime(
+                self.created, self.__class__._data_time_string
+            ),
+            'is_active': self.is_active,
+            'is_deleted': self.is_deleted,
+            'modified': datetime.strftime(
+                self.modified, self.__class__._data_time_string
+            ),
+            'oid': str(self.oid),
+        }
+
+    @classmethod
+    def from_data_dict(cls, data_dict: (dict,)):
+        return cls(**data_dict)
+
+    @classmethod
+    def sort(cls, objects: (list, tuple), sort_by: (str,)) -> (list,):
+        """
+Returns a list of the original objects supplied, sorted by the
+criteria provided
+"""
+        raise NotImplementedError()
+
+class User(JSONFileDataObject):
     _file_store_dir = r'..\data'
 
     def __init__(self, company_name, legal_form,
@@ -646,6 +989,46 @@ Returns a list of the original objects supplied, sorted by the
 criteria provided
 """
         raise NotImplementedError()
+
+
+class IncomesDataProcessing:
+    """
+    This class will manipulate attributes of incomes objects in a manner that we have useful data to work with.
+    At the end we will have values for
+    -
+    """
+
+    def __init__(self):
+        self.income_objects = Income.get()
+
+    def get_annual_income(self):
+        """
+        Returns: sum of all incomes for each month
+        """
+        # Use a list comprehension to extract the 'income' attribute from each object
+        # and pass the resulting list to the sum function
+        return sum(obj.income for obj in self.income_objects)
+
+    def get_monthly_contribution_rate(self):
+        return {obj.month: obj.income / 12 for obj in self.income_objects}
+
+    def get_distribution_of_representatives(self):
+        # Α)Άθροισμα μηνιαίων φορολογητέων / ετήσιος κύκλος εργασιών
+        # Β)(Ετήσιος κύκλος εργασιών  - Άθροισμα φορολογητέων)/ ετήσιος κύκλος εργασιών
+        annual_income = self.get_annual_income()
+        dist_a = sum(obj.taxable_income for obj in self.income_objects) / annual_income
+        dist_b = (annual_income - sum(obj.taxable_income for obj in self.income_objects)) / annual_income
+        return dist_a, dist_b
+
+    def get_taxable_incomes(self):
+        return sum(obj.taxable_income for obj in self.income_objects)
+
+    def get_annual_vat(self):
+        return self.get_taxable_incomes() * VAT_RATE
+
+
+class ExpensesDataProcessing:
+    pass
 
 
 if __name__ == '__main__':

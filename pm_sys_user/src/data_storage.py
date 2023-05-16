@@ -3,43 +3,15 @@
 TODO: Document the module.
 Provides classes and functionality for SOME_PURPOSE
 """
-
-#######################################
-# Any needed from __future__ imports  #
-# Create an "__all__" list to support #
-#   "from module import member" use   #
-#######################################
-
-__all__ = [
-    # Constants
-    # Exceptions
-    # Functions
-    # ABC "interface" classes
-    # ABC abstract classes
-    'JSONFileDataObject',
-    # Concrete classes
-]
-
-#######################################
-# Module metadata/dunder-names        #
-#######################################
-
-__author__ = 'Brian D. Allbee'
-__copyright__ = 'Copyright 2018, all rights reserved'
-__status__ = 'Development'
-
-#######################################
-# Standard library imports needed     #
-#######################################
-
 import abc
 import json
 import os
-import sys
+import psycopg2
 
 from datetime import datetime
 from uuid import UUID, uuid4
 from data_objects import BaseDataObject
+
 
 #######################################
 
@@ -518,6 +490,118 @@ criteria
     ###################################
     # Static methods                  #
     ###################################
+
+
+class AWSDatabaseObject():
+    """
+    Provides baseline functionality, interface requirements and type-identity for objects that can persist their
+    state-data to a RDBS(relational database SQL like) back-end data store.
+    """
+
+    def __init__(self, host, port, database_name, username, password):
+        self.host = host
+        self.port = port
+        self.database_name = database_name
+        self.username = username
+        self.password = password
+        self.connection = None
+
+    def connect(self):
+        try:
+            self.connection = psycopg2.connect(
+                host=self.host,
+                port=self.port,
+                user=self.username,
+                password=self.password,
+                database=self.database_name
+            )
+            print("Connected to the database!")
+        except Exception as e:
+            print("Connection to the database failed:", str(e))
+
+    def disconnect(self):
+        if self.connection is not None:
+            self.connection.close()
+            print("Disconnected from the database!")
+
+    def execute_query(self, query):
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchall()
+                return result
+        except Exception as e:
+            print("Query execution failed:", str(e))
+            return None
+
+        def _create(self) -> None:
+            """
+    Creates a new state-data record for the instance in the back-end
+    data-store
+    """
+            # - Since all data-transactions for these objects involve
+            #   a file-write, we're just going to define this method
+            #   in order to meet the requirements of BaseDataObject,
+            #   make it raise an error, and override the save method
+            #   to perform the actual file-write.
+            raise NotImplementedError(
+                '%s._create is not implemented, because the save '
+                'method handles all the data-writing needed for '
+                'the class. Use save() instead.' %
+                self.__class__.__name__
+            )
+
+        def _update(self) -> None:
+            """
+    Updates an existing state-data record for the instance in the
+    back-end data-store
+    """
+            # - Since all data-transactions for these objects involve
+            #   a file-write, we're just going to define this method
+            #   in order to meet the requirements of BaseDataObject,
+            #   make it raise an error, and override the save method
+            #   to perform the actual file-write.
+            raise NotImplementedError(
+                '%s._update is not implemented, because the save '
+                'method handles all the data-writing needed for '
+                'the class. Use save() instead.' %
+                self.__class__.__name__
+            )
+
+        # NOTE: This can be used to illustrate unittest.skip
+        def save(self):
+            """
+    Saves the instance's state-data to the back-end data-store by
+    creating it if the instance is new, or updating it if the
+    instance is dirty
+    """
+            pass
+
+        @classmethod
+        def delete(cls, *oids):
+            """
+    Performs an ACTUAL record deletion from the back-end data-store
+    of all records whose unique identifiers have been provided
+    """
+            pass
+
+        @classmethod
+        def get(cls, *oids, **criteria):
+            """
+    Finds and returns all instances of the class from the back-end
+    data-store whose oids are provided and/or that match the supplied
+    criteria
+    """
+            pass
+
+
+class DatastoreConfig:
+    """
+    Represents a set of credentials for connecting to a back-end database engine that requires host,port,database,user and
+    password values.
+    """
+    # todo:this class should be implemented to read configuration from external file
+    pass
 
 
 if __name__ == '__main__':

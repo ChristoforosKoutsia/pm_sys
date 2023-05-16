@@ -36,4 +36,3 @@ class CustomMessageBox(QMessageBox):
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.exec()
 
-
