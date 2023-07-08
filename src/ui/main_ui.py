@@ -1,4 +1,5 @@
 # main_window.py
+import os
 import sys
 import main_functionalities
 from PyQt6.QtWidgets import QApplication, QSizePolicy, QWidget, QHBoxLayout
@@ -52,7 +53,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setMinimumSize(550, 450)
 
     def set_style_sheet(self):
-        with open(r"C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\cfg\styles.css", "r") as file:
+        # Get the current working directory
+        current_dir = os.getcwd()
+
+        # Go two folders back
+        parent_dir = os.path.dirname(os.path.dirname(current_dir))
+        styles_dir = os.path.join(parent_dir, 'cfg', 'styles.css')
+        with open(styles_dir, "r") as file:
             stylesheet = file.read()
 
         self.centralwidget.setStyleSheet(stylesheet)
