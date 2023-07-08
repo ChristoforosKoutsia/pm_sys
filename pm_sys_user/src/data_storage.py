@@ -6,6 +6,8 @@ Provides classes and functionality for SOME_PURPOSE
 import abc
 import json
 import os
+from abc import ABC
+import datetime
 import psycopg2
 
 from datetime import datetime
@@ -28,41 +30,6 @@ JSON files in a local file-system file-cache
     _file_store_dir = None
     _file_store_ready = False
     _loaded_objects = None
-
-    ###################################
-    # Property-getter methods         #
-    ###################################
-
-    #     def _get_property_name(self) -> str:
-    #         return self._property_name
-
-    ###################################
-    # Property-setter methods         #
-    ###################################
-
-    #     def _set_property_name(self, value:str) -> None:
-    #         # TODO: Type- and/or value-check the value argument of the
-    #         #       setter-method, unless it's deemed unnecessary.
-    #         self._property_name = value
-
-    ###################################
-    # Property-deleter methods        #
-    ###################################
-
-    #     def _del_property_name(self) -> None:
-    #         self._property_name = None
-
-    ###################################
-    # Instance property definitions   #
-    ###################################
-
-    #     abstract_property = abc.abstractproperty()
-
-    #     property_name = property(
-    #         # TODO: Remove setter and deleter if access is not needed
-    #         _get_property_name, _set_property_name, _del_property_name,
-    #         'Gets, sets or deletes the property_name (str) of the instance'
-    #     )
 
     ###################################
     # Object initialization           #
@@ -263,7 +230,6 @@ instance is dirty
                     ), 'w'
                 )
 
-                print("Now i will write everywhere")
                 # - Write the instance's data-dict to the file as JSON
                 json.dump(self.to_data_dict(), fp, indent=4)
 
@@ -492,107 +458,275 @@ criteria
     ###################################
 
 
-class AWSDatabaseObject():
+class AWSDatabaseObject(BaseDataObject, metaclass=abc.ABCMeta):
     """
     Provides baseline functionality, interface requirements and type-identity for objects that can persist their
     state-data to a RDBS(relational database SQL like) back-end data store.
+    Since SQL, for the various CRUD operations, or at least for specific starting points for those CRUD operations,
+    would need to be stored and accessible to the classes, a viable option would be to attach them as class-attributes
     """
 
-    def __init__(self, host, port, database_name, username, password):
-        self.host = host
-        self.port = port
-        self.database_name = database_name
-        self.username = username
-        self.password = password
-        self.connection = None
+    _user = "dummy_id"
+    _host = "pmsdatabase.cfyebvbrqzy6.eu-north-1.rds.amazonaws.com"
+    _password = "12345678"
+    _port = 5432
+    _database_name = "postgres"
+    """
+    Since the SQL for the various CRUD operations would include the tables that the data
+    is stored in, and the process of connecting to the database in most RDBMS' handles
+    the equivalents to the connection and database in our MongoDB approach, only
+    the connection itself needs to be tracked and available as a property:
+    """
+    _sql_delete = "DELETE FROM {} WHERE oid IN ('{}');"
+    _sql_read_oids = "SELECT * FROM {} WHERE oid IN ('{}')"
+    _sql_read_all = "SELECT * FROM {}"
+    _sql_read_criteria = "SELECT * FROM {} WHERE {}"
 
-    def connect(self):
+    ###################################
+    # Property-getter methods #
+    ###################################
+    def _get_connection(self):
         try:
-            self.connection = psycopg2.connect(
-                host=self.host,
-                port=self.port,
-                user=self.username,
-                password=self.password,
-                database=self.database_name
-            )
-            print("Connected to the database!")
-        except Exception as e:
-            print("Connection to the database failed:", str(e))
+            return self.__class__._connection
+        except AttributeError:
+            # - Most RDBMS libraries provide a "connect" function, or
+            # allow the creation of a "connection" object, using the
+            # parameters we've named in DatastoreConfig, or simple
+            # variations of them, so all we need to do is connect:
+            try:
+                self.__class__._connection = psycopg2.connect(
+                    host=self.__class__.host,
+                    port=self.__class__.port,
+                    user=self.__class__.username,
+                    password=self.__class__.password,
+                    database=self.__class__.database_name
+                )
+                print("Connected to the database!")
+            except Exception as e:
+                print("Connection to the database failed:", str(e))
 
-    def disconnect(self):
-        if self.connection is not None:
-            self.connection.close()
-            print("Disconnected from the database!")
+            return self.__class__._connection
 
-    def execute_query(self, query):
+    """
+    Connection is lazily instantiated and performs an actual deletion, rather than resetting to default values,
+    as follows:
+    """
+
+    ###################################
+    # Property-deleter methods #
+    ###################################
+    def _del_connection(self) -> None:
         try:
-            with self.connection.cursor() as cursor:
-                cursor.execute(query)
+            del self.__class__._connection
+
+        except AttributeError:
+            # - It may already not exist
+            pass
+
+    connection = property(_get_connection, None, _del_connection,
+                          'Gets or deletes the database-connection that the instance '
+                          'will use to manage its persistent state-data'
+                          )
+
+    python_to_sql_type_mapping = {
+        str: 'VARCHAR',
+        int: 'INTEGER',
+        float: 'FLOAT',
+        bool: 'BOOLEAN',
+        datetime: 'TIMESTAMP',
+        UUID: 'UUID'
+        # Add more mappings for other Python types and SQL data types as needed
+    }
+
+    def __init__(self,
+                 oid: (UUID, str, None) = None,
+                 created: (datetime, str, float, int, None) = None,
+                 modified: (datetime, str, float, int, None) = None,
+                 is_active: (bool, int, None) = None,
+                 is_deleted: (bool, int, None) = None,
+                 is_dirty: (bool, int, None) = None,
+                 is_new: (bool, int, None) = None, ):
+        self.table_name = self.__class__.__name__
+
+        # - Call parent initializers if needed
+        BaseDataObject.__init__(
+            self, oid, created, modified, is_active, is_deleted,
+            is_dirty, is_new
+        )
+        self.column_names = self.to_data_dict().keys()
+        self.column_values = self.to_data_dict().values()
+        # check if table name exists otherwise create a new table.
+        # all the tables will have as primary key the uiid
+        sql_type = [type(column) for column in self.column_values]
+
+        column_definitions = ', '.join(
+            f"{column} {(self.__class__.python_to_sql_type_mapping[data])}" for column, data in
+            zip(self.column_names, sql_type))
+        create_table_query = f'''
+        CREATE TABLE IF NOT EXISTS {self.table_name} ({column_definitions} , PRIMARY KEY (oid))
+        '''
+        # initialize class instance
+        self.__class__.execute_query(create_table_query)
+
+    def _create(self) -> None:
+        # - Write the instance's data-dict to the database
+        # we need to define first the sql string
+        placeholders = ', '.join('%s' for _ in self.to_data_dict().values())
+        column_definitions = ', '.join(f"{column}" for column in self.column_names)
+        values = tuple(val for val in self.column_values)
+        values_definition = ', '.join(f"'{val}'" for val in values)
+        insert_query = f"INSERT INTO {self.table_name} ({column_definitions}) VALUES ({values_definition});"
+        print(insert_query)
+        self.__class__.execute_query(insert_query)
+
+    def _update(self) -> None:
+        """
+Updates an existing state-data record for the instance in the
+back-end data-store
+"""
+        set_clause = ', '.join(f"{column_name} = %s" for column_name in self.column_names)
+        values = tuple(val for val in self.column_names)
+        update_query = f"UPDATE {self.table_name} SET {set_clause} WHERE oid = {self.oid}"
+
+    def save(self):
+        """
+        Saves the instance's state-data to the back-end data-store by
+        creating it if the instance is new, or updating it if the
+        instance is dirty
+        """
+        if self.is_new:
+            self._create()
+        elif self.is_dirty:
+            self._update()
+
+    ###################################
+    # Class methods #
+    ###################################
+    @classmethod
+    def get_connection(cls):
+        try:
+            return cls._connection
+        except AttributeError:
+            # - Most RDBMS libraries provide a "connect" function, or
+            # allow the creation of a "connection" object, using the
+            # parameters we've named in DatastoreConfig, or simple
+            # variations of them, so all we need to do is connect:
+            try:
+                cls._connection = psycopg2.connect(
+                    host=cls._host,
+                    port=cls._port,
+                    user=cls._user,
+                    password=cls._password,
+                    database=cls._database_name
+                )
+                print("Connected to the database!")
+            except Exception as e:
+                print("Connection to the database failed:", str(e))
+
+            return cls._connection
+
+
+
+    @classmethod
+    def execute_query(cls, query,command =""):
+        connection = cls.get_connection()
+        result = None
+        try:
+            cursor = connection.cursor()
+            result = cursor.execute(query)
+            if command == 'read':
                 result = cursor.fetchall()
-                return result
+                columns = [column[0] for column in cursor.description]  # Get the column names
+                results = []
+                for row in result:
+                    row_dict = dict(zip(columns, row))
+                    results.append(row_dict)
+                return results
+            connection.commit()
+            return result
         except Exception as e:
             print("Query execution failed:", str(e))
-            return None
+            return result
 
-        def _create(self) -> None:
-            """
-    Creates a new state-data record for the instance in the back-end
-    data-store
-    """
-            # - Since all data-transactions for these objects involve
-            #   a file-write, we're just going to define this method
-            #   in order to meet the requirements of BaseDataObject,
-            #   make it raise an error, and override the save method
-            #   to perform the actual file-write.
-            raise NotImplementedError(
-                '%s._create is not implemented, because the save '
-                'method handles all the data-writing needed for '
-                'the class. Use save() instead.' %
-                self.__class__.__name__
-            )
+    @classmethod
+    def delete(cls, *oids):
+        # - First, we need the database-connection that we're
+        # working with:
+        SQL = cls._sql_delete.format(cls.__name__, oids)
+        # - Don't forget to sanitize it before executing it!
+        result_set = cls.execute_query(SQL)
 
-        def _update(self) -> None:
-            """
-    Updates an existing state-data record for the instance in the
-    back-end data-store
     """
-            # - Since all data-transactions for these objects involve
-            #   a file-write, we're just going to define this method
-            #   in order to meet the requirements of BaseDataObject,
-            #   make it raise an error, and override the save method
-            #   to perform the actual file-write.
-            raise NotImplementedError(
-                '%s._update is not implemented, because the save '
-                'method handles all the data-writing needed for '
-                'the class. Use save() instead.' %
-                self.__class__.__name__
-            )
+    Most of the pattern and approach behind the get method should look familiar; again,
+    it's got the same signature (and is intended to perform the same activities) as the
+    methods that have been created so far, which implement the required functionality of
+    the BaseDataObject:
+    """
 
-        # NOTE: This can be used to illustrate unittest.skip
-        def save(self):
-            """
-    Saves the instance's state-data to the back-end data-store by
-    creating it if the instance is new, or updating it if the
-    instance is dirty
-    """
-            pass
+    @classmethod
+    def get(cls, *oids, **criteria) -> list:
+        result_set = []
+        # - The first pass of the process retrieves documents based
+        # on oids or criteria.
+        # - We also need to keep track of whether or not to do a
+        # matches call on the results after the initial data-
+        # retrieval:
+        post_filter = False
 
-        @classmethod
-        def delete(cls, *oids):
-            """
-    Performs an ACTUAL record deletion from the back-end data-store
-    of all records whose unique identifiers have been provided
-    """
-            pass
+        # - Records are often returned as a tuple (result_set)
+        # of tuples (rows) of tuples (field-name, field-value):
+        # ( ..., ( ('field-name', 'value' ), (...), ... ), …)
+        # The branch that handles oid requests is as follows:
+        if oids:
+            # - Need to replace any placeholder values in the raw SQL
+            # with actual values, AND sanitize the SQL string, but
+            # it starts with the SQL in cls._sql_read_oids
+            SQL = cls._sql_read_oids.format(cls.__name__)
+            result_set = cls.execute_query(SQL)
+            if criteria:
+                post_filter = True
+        # The criteria branch is as follows:
+        elif criteria:
+            # - The same sort of replacement would need to happen here
+            # as happens for oids, above. If the query uses just
+            # single criteria key/value pair initially, we can use the
+            # match-based filtering later to filter further as needed
+            conditions = ' AND '.join(["{} = '{}'".format(key, value) for key, value in criteria.items()])
+            read_query = "SELECT * FROM {} WHERE {}".format(cls.__name__, conditions)
+            SQL = cls._sql_read_criteria
+            result_set = cls.execute_query(SQL)
+            if len(criteria) > 1:
+                post_filter = True
 
-        @classmethod
-        def get(cls, *oids, **criteria):
-            """
-    Finds and returns all instances of the class from the back-end
-    data-store whose oids are provided and/or that match the supplied
-    criteria
-    """
-            pass
+        # The default branch that simply gets everything else is as follows:
+        else:
+            SQL = cls._sql_read_all.format(cls.__name__)
+            result_set = cls.execute_query(SQL)
+
+        result_set = cls.execute_query(SQL,'read')
+        #data_dicts = [dict([field_tuple for field_tuple in row]) for row in result_set]
+
+        """From this point on, the process is pretty much the same as in the previous
+        implementations, in JSONFileDataObject and HMSMongoDataObject:
+        # - With those, we can create the initial list of instances:"""
+        try:
+            results = [cls.from_data_dict(data_dict) for data_dict in result_set]
+        except TypeError:
+            print("There are not yet objects")
+            results={}
+        # - If post_filter has been set to True, then the request
+        # was for items by oid *and* that have certain criteria
+        # if post_filter:
+        #     results = [
+        #         obj for obj in results if obj.matches(**criteria)
+        #     ]
+
+        return results
+
+
+
+
+
 
 
 class DatastoreConfig:

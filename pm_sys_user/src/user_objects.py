@@ -51,6 +51,7 @@ sys.path.insert(0, root_dir)
 # Third-party imports needed          #
 #######################################
 from data_storage import JSONFileDataObject
+from data_storage import AWSDatabaseObject
 from data_storage import BaseDataObject
 
 #######################################
@@ -322,7 +323,7 @@ criteria provided
         raise NotImplementedError()
 
 
-class Expense(JSONFileDataObject):
+class Expense(JSONFileDataObject, ABC):
     """
      Represents an expense entity of the corresponding business.
      """
@@ -625,8 +626,9 @@ class Employee(JSONFileDataObject, ABC):
                 )
             )
         # value check
-        if len(value)<4:
-            raise ValueError(f"Name of employee should be at least 4 characters given name {value} is below this threshold ")
+        if len(value) < 4:
+            raise ValueError(
+                f"Name of employee should be at least 4 characters given name {value} is below this threshold ")
         self._name = value
 
     def _set_surname(self, value: str) -> None:
@@ -644,10 +646,10 @@ class Employee(JSONFileDataObject, ABC):
                 )
             )
         # value check
-        if len(value)<4:
-            raise ValueError(f"Name of employee should be at least 4 characters given name {value} is below this threshold ")
+        if len(value) < 4:
+            raise ValueError(
+                f"Name of employee should be at least 4 characters given name {value} is below this threshold ")
         self._surname = value
-
 
     def _set_gross_salary(self, value: float) -> None:
         # employees salar should be either float or integer value > 0
@@ -672,7 +674,7 @@ class Employee(JSONFileDataObject, ABC):
     def _set_type_of_employment(self, value: str) -> None:
         # employees salar should be either float or integer value > 0
         # - Type-check: This is a required str value
-        if type(value)  not in self.TYPE_OF_EMPLOYMENT :
+        if type(value) not in self.TYPE_OF_EMPLOYMENT:
             raise TypeError(f"Type of employment should be in {self.TYPE_OF_EMPLOYMENT}")
         self._type_of_employment = value
 
@@ -690,7 +692,7 @@ class Employee(JSONFileDataObject, ABC):
     )
     gross_salary = property(
         # TODO: Remove setter and deleter if access is not needed
-        _set_gross_salary    )
+        _set_gross_salary)
 
     net_salary = property(
         # TODO: Remove setter and deleter if access is not needed
@@ -701,7 +703,6 @@ class Employee(JSONFileDataObject, ABC):
         # TODO: Remove setter and deleter if access is not needed
         _set_type_of_employment
     )
-
 
     ###################################
     # Object initialization           #
@@ -726,8 +727,8 @@ class Employee(JSONFileDataObject, ABC):
         self._set_name(name)
         self._set_surname(surname)
         self._set_net_salary(net_salary)
-        self._set_gross_salary (gross_salary)
-        self._type_of_employment (type_of_employment)
+        self._set_gross_salary(gross_salary)
+        self._type_of_employment(type_of_employment)
 
         JSONFileDataObject.__init__(
             self, oid, created, modified, is_active,
@@ -772,11 +773,13 @@ criteria provided
 """
         raise NotImplementedError()
 
+
 class Supplier(JSONFileDataObject, ABC):
     _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
     """
      Represents an income entity of the corresponding business.
      """
+
     ###################################
     # Class attributes/constants      #
     ###################################
@@ -933,6 +936,7 @@ criteria provided
 """
         raise NotImplementedError()
 
+
 class User(JSONFileDataObject):
     _file_store_dir = r'..\data'
 
@@ -1030,6 +1034,483 @@ class IncomesDataProcessing:
 class ExpensesDataProcessing:
     pass
 
+
+class Income_AWS(AWSDatabaseObject):
+
+    # dictionary that maps english words with greek once so they can be represented in UI
+
+    ###################################
+    # Class attributes/constants      #
+    ###################################
+
+    ###################################
+    # Property-getter methods         #
+    ###################################
+
+    def _get_month(self) -> str:
+        return self._month
+
+    def _get_income(self) -> float:
+        return self._income
+
+    def _get_taxable_income(self) -> float:
+        return self._taxable_income
+
+    ###################################
+    # Property-setter methods         #
+    ###################################
+
+    def _set_month(self, value: str) -> None:
+        # month should be a string and can only take values ["Jan-Dec"]
+        # - Type-check: This is a required str value
+        if type(value) != str:
+            raise TypeError(
+                '%s.month expects a single-line, '
+                'non-empty str value, with no whitespace '
+                'nor spaces and accepted strings are only %s, but was passed '
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, MONTHS, value,
+                    type(value).__name__
+                )
+            )
+        # value check
+        if value not in MONTHS:
+            raise ValueError(
+                '%s.month expects a single-line, '
+                'non-empty str value, with no whitespace '
+                'nor spaces and accepted strings are only %s, but was passed '
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, MONTHS, value,
+                    type(value).__name__
+                )
+            )
+        self._month = value
+
+    def _set_income(self, value: float) -> None:
+        # month should be a string and can only take values ["Jan-Dec"]
+        # - Type-check: This is a required str value
+        if type(value) not in [float, int]:
+            raise TypeError(
+                '%s.income expects numeric values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(
+                '%s.income expects non negative values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        self._income = value
+
+    def _set_taxable_income(self, value: float) -> None:
+        # month should be a string and can only take values ["Jan-Dec"]
+        # - Type-check: This is a required str value
+        if type(value) not in [float, int]:
+            raise TypeError(
+                '%s.taxable_income expects numeric values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(
+                '%s.taxable_income expects non negative values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        self._taxable_income = value
+
+    ###################################
+    # Property-deleter methods        #
+    ###################################
+
+    def _del_month(self) -> None:
+        self._month = None
+
+    def _del_income(self) -> None:
+        self._income = None
+
+    def _del_taxable_income(self) -> None:
+        self._taxable_income = None
+
+    ###################################
+    # Instance property definitions   #
+    ###################################
+
+    month = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _get_month, _set_month, _del_month,
+        'Gets, sets or deletes the month (str) of the instance'
+    )
+    income = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _get_income, _set_income, _del_income,
+        'Gets, sets or deletes the income (float) of the instance'
+    )
+    taxable_income = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _get_taxable_income, _set_taxable_income, _del_taxable_income,
+        'Gets, sets or deletes the taxable_income (float) of the instance'
+    )
+
+    ###################################
+    # Object initialization           #
+    ###################################
+
+    # TODO: Add and document arguments if/as needed
+    def __init__(self,
+                 month,
+                 income,
+                 taxable_income,
+                 oid: (UUID, str, None) = None,
+                 created: (datetime, str, float, int, None) = None,
+                 modified: (datetime, str, float, int, None) = None,
+                 is_active: (bool, int, None) = None,
+                 is_deleted: (bool, int, None) = None,
+                 is_dirty: (bool, int, None) = None,
+                 is_new: (bool, int, None) = None,
+                 ):
+        """
+Object initialization.
+self .............. (Income instance, required) The instance to
+                    execute against
+month.............. (str,required) The month that the income is referred to.
+income............. (float,required)
+taxable_income.......(float,requried)
+"""
+        self._set_month(month)
+        self._set_income(income)
+        self._set_taxable_income(taxable_income)
+
+        AWSDatabaseObject.__init__(
+            self,
+            oid, created, modified, is_active,
+            is_deleted, is_dirty, is_new
+        )
+
+    def matches(self, **criteria) -> (bool,):
+        return BaseDataObject.matches(self, **criteria)
+
+    def to_data_dict(self) -> (dict,):
+        return {
+            # Properties from BaseArtisan:
+            'month': self.month,
+            'income': self.income,
+            'taxable_income': self.taxable_income,
+            # - Properties from BaseDataObject
+
+            'created': datetime.strftime(
+                self.created, self.__class__._data_time_string
+            ),
+            'is_active': self.is_active,
+            'is_deleted': self.is_deleted,
+            'modified': datetime.strftime(
+                self.modified, self.__class__._data_time_string
+            ),
+            'oid': str(self.oid),
+        }
+
+    @classmethod
+    def from_data_dict(cls, data_dict: (dict,)):
+        return cls(**data_dict)
+
+    @classmethod
+    def sort(cls, objects: (list, tuple), sort_by: (str,)) -> (list,):
+        """
+Returns a list of the original objects supplied, sorted by the
+criteria provided
+"""
+        raise NotImplementedError()
+
+
+
+
+
+
+class Expense_AWS(AWSDatabaseObject, ABC):
+    """
+     Represents an expense entity of the corresponding business.
+     """
+    _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
+    ###################################
+    # Class attributes/constants      #
+    ###################################
+    FIXED_EXPENSE_CATEGORIES = [
+        "Λογιστική παρακολούθηση",
+        "Διαχείριση site",
+        "Καθαριότητα",
+        "Συντηρήσεις",
+        "Νερό",
+        "Ασφάλεια επιχείρησης",
+        "Πυρασφάλεια",
+        "Αναλώσιμα γραφείου",
+        "Email services",
+        "Τηλέφωνο",
+        "ΕΦΚΑ",
+        "Ενοίκιο",
+        "ERP",
+        "CLOUD",
+        "ANTIVIRUS",
+        "ΣΥΝΔΡΟΜΕΣ ΕΠΙΜΕΛΗΤΗΡΙΩΝ",
+        "Μισθοδοσίες",
+        "Ηλεκτρικό ρεύμα",
+        "Συμμετοχή σε εκθέσεις",
+        "Υπεργολαβίες",
+    ]
+
+    TYPES_OF_CHARGE = [
+        "Ετήσια",
+        "Μηνιαία",
+        "Εβδομαδιαία",
+        "Ημερήσια",
+        "Άπαξ",
+    ]
+
+    ###################################
+    # Property-getter methods         #
+    ###################################
+
+    def _get_fixed_expense_category(self) -> str:
+        return self._fixed_expense_category
+
+    def _get_type_of_charge(self) -> str:
+        return self._type_of_charge
+
+    def _get_price(self) -> float:
+        return self._price
+
+    def _get_non_taxable_price(self) -> float:
+        return self._non_taxable_price
+
+    def _get_vat(self) -> float:
+        return self._vat
+
+    ###################################
+    # Property-setter methods         #
+    ###################################
+
+    def _set_fixed_expense_category(self, value: str) -> None:
+        # month should be a string and can only take values ["Jan-Dec"]
+        # - Type-check: This is a required str value
+        if type(value) != str:
+            raise TypeError
+
+        # value check
+        if value not in self.FIXED_EXPENSE_CATEGORIES:
+            raise ValueError
+
+        self._fixed_expense_category = value
+
+    def _set_type_of_charge(self, value: str) -> None:
+        # month should be a string and can only take values ["Jan-Dec"]
+        # - Type-check: This is a required str value
+        if type(value) != str:
+            raise TypeError
+
+        # value check
+        if value not in self.TYPES_OF_CHARGE:
+            raise ValueError
+
+        self._type_of_charge = value
+
+    def _set_price(self, value: float) -> None:
+        # month should be a string and can only take values ["Jan-Dec"]
+        # - Type-check: This is a required str value
+        print("My price is value")
+        if type(value) not in [float, int]:
+            raise TypeError(
+                '%s.income expects numeric values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(
+                '%s.income expects non negative values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        self._price = value
+
+    def _set_non_taxable_price(self, value: float) -> None:
+        if type(value) not in [float, int]:
+            raise TypeError(
+                '%s.taxable_income expects numeric values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(
+                '%s.taxable_income expects non negative values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check (non-taxable price should be lower than price)
+        if self.price is not None and value > self.price:
+            raise ValueError(
+                "Το αποφορολογητέο ποσό πρέπει να είναι μικρότερο απο το ποσό εξόδου!"
+            )
+
+        self._non_taxable_price = value
+
+    def _set_vat(self, value):
+        if type(value) not in [float, int]:
+            raise TypeError(
+                '%s.taxable_income expects numeric values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        # value check (only non-negative values are accepted)
+        if value < 0:
+            raise ValueError(
+                '%s.vat expects non negative values but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+        if value > 100:
+            raise ValueError(
+                '%s.vat expects to be <100 but instead was passed'
+                '"%s" (%s)' %
+                (
+                    self.__class__.__name__, value,
+                    type(value).__name__
+                )
+            )
+
+        self._vat = value
+
+    ###################################
+    # Property-deleter methods        #
+    ###################################
+    # TODO -> add deleter methods
+
+    ###################################
+    # Instance property definitions   #
+    ###################################
+
+    category = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _get_fixed_expense_category, _set_fixed_expense_category,
+        'Gets, sets or deletes the month (str) of the instance'
+    )
+    type_of_charge = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _get_type_of_charge, _set_type_of_charge,
+        'Gets, sets or deletes the income (float) of the instance'
+    )
+    price = property(
+        # TODO: Remove setter and deleter if access is not needed
+        _get_price, _set_price,
+        'Gets, sets or deletes the taxable_income (float) of the instance'
+    )
+
+    non_taxable_price = property(_get_non_taxable_price, _set_non_taxable_price)
+
+    vat = property(_get_vat, _set_vat)
+
+    ###################################
+    # Object initialization           #
+    ###################################
+
+    # TODO: Add and document arguments if/as needed
+    def __init__(self,
+                 category,
+                 type_of_charge,
+                 price,
+                 non_taxable_price,
+                 vat,
+                 oid: (UUID, str, None) = None,
+                 created: (datetime, str, float, int, None) = None,
+                 modified: (datetime, str, float, int, None) = None,
+                 is_active: (bool, int, None) = None,
+                 is_deleted: (bool, int, None) = None,
+                 is_dirty: (bool, int, None) = None,
+                 is_new: (bool, int, None) = None,
+                 ):
+        self.price = price
+        self.non_taxable_price = non_taxable_price
+        self.category = category
+        self.type_of_charge = type_of_charge
+
+        self.vat = vat
+        AWSDatabaseObject.__init__(
+            self, oid, created, modified, is_active,
+            is_deleted, is_dirty, is_new
+        )
+
+        self._set_is_dirty(False)
+
+    def matches(self, **criteria) -> (bool,):
+        return BaseDataObject.matches(self, **criteria)
+
+    def to_data_dict(self) -> (dict,):
+        return {
+            # Properties from BaseArtisan:
+            'category': self.category,
+            'type_of_charge': self.type_of_charge,
+            'price': self.price,
+            'non_taxable_price': self.non_taxable_price,
+            'vat': self.vat,
+
+            # - Properties from BaseDataObject (through
+            #   JSONFileDataObject)
+            'created': datetime.strftime(
+                self.created, self.__class__._data_time_string
+            ),
+            'is_active': self.is_active,
+            'is_deleted': self.is_deleted,
+            'modified': datetime.strftime(
+                self.modified, self.__class__._data_time_string
+            ),
+            'oid': str(self.oid),
+        }
+
+    @classmethod
+    def from_data_dict(cls, data_dict: (dict,)):
+        return cls(**data_dict)
+
+    @classmethod
+    def sort(cls, objects: (list, tuple), sort_by: (str,)) -> (list,):
+        """
+Returns a list of the original objects supplied, sorted by the
+criteria provided
+"""
+        raise NotImplementedError()
 
 if __name__ == '__main__':
     pass

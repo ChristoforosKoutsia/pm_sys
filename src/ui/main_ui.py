@@ -8,6 +8,7 @@ from PyQt6.QtCore import Qt
 from menu_container import MenuContainer
 from main_container import MainContainer
 
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -48,7 +49,7 @@ class MainWindow(QtWidgets.QMainWindow):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sizePolicy)
-        self.setMinimumSize(550,450)
+        self.setMinimumSize(550, 450)
 
     def set_style_sheet(self):
         with open(r"C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\cfg\styles.css", "r") as file:
