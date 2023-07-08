@@ -10,3 +10,7 @@ Python 3 and Qt framework shall be used for the backend and UI development , giv
 Project shall consists of two apps : 
  1. For the users (is called pm_sys users)
  2. For the administrator which can keep track of every other user
+
+<b> How to run it  </b>:
+In order to run it main script should be used.
+1. Inside scr/ui execute main_ui.py
