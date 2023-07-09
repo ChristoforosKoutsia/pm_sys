@@ -1,0 +1,10 @@
+PyQt6				==	6.5.1	
+PyQt6-Charts		==	6.5.0	
+PyQt6-Charts-Qt6	==	6.5.1	
+PyQt6-Qt6			==	6.5.1	
+PyQt6-sip			==	13.5.1	
+PyQtChart			==	5.15.6	
+pip					==	21.3.1				
+psycopg2			==	2.9.6	
+setuptools			==	60.2.0	
+wheel				==	0.37.1
