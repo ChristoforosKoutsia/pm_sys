@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d812591a-793b-45df-a15b-fbb8ee1d2374" name="Changes" comment="" />
+    <list default="true" id="d812591a-793b-45df-a15b-fbb8ee1d2374" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/pm_sys.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pm_sys.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pm_sys_user/src/user_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/pm_sys_user/src/user_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/main_functionalities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/main_functionalities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/main_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/main_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/mainwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/mainwindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/menu_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/menu_container.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,8 +41,9 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/billk/OneDrive/Documents/GitHub/pm_sys/pm_sys_user/src&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.toDoOptions&quot;
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/PycharmProjects/pm_sys&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -47,7 +56,29 @@
       <recent name="C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\src\ui_py" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
+      <module name="pm_sys" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\HP\PycharmProjects\pm_sys\venv\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (pm_sys)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/ui" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/ui/main_ui.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests for " type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pm_sys" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -62,6 +93,10 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python tests.Python tests for " />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Python tests for " />
@@ -81,18 +116,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/ui/main_container.py</url>
-          <line>710</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pm_sys_user/src/data_storage.py</url>
-          <line>606</line>
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

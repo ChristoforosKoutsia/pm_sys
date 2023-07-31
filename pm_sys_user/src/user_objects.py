@@ -116,6 +116,8 @@ eng_2_greek = {
 #######################################
 class Income(JSONFileDataObject):
     _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
+    _file_store_dir = os.path.join(os.getcwd(), "../../pm_sys_user/data")
+
     """
      Represents an income entity of the corresponding business.
      """
@@ -328,6 +330,8 @@ class Expense(JSONFileDataObject, ABC):
      Represents an expense entity of the corresponding business.
      """
     _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
+    _file_store_dir = os.path.join(os.getcwd(), "../../pm_sys_user/data")
+
     ###################################
     # Class attributes/constants      #
     ###################################
@@ -595,6 +599,8 @@ criteria provided
 
 class Employee(JSONFileDataObject, ABC):
     _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
+    _file_store_dir = os.path.join(os.getcwd(), "../../pm_sys_user/data")
+
     """
      Represents an income entity of the corresponding business.
      """
@@ -776,6 +782,8 @@ criteria provided
 
 class Supplier(JSONFileDataObject, ABC):
     _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
+    _file_store_dir = os.path.join(os.getcwd(), "../../pm_sys_user/data")
+
     """
      Represents an income entity of the corresponding business.
      """
@@ -1248,6 +1256,8 @@ class Expense_AWS(AWSDatabaseObject, ABC):
      Represents an expense entity of the corresponding business.
      """
     _file_store_dir = r'C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\data'
+    _file_store_dir = os.path.join(os.getcwd(), "../../pm_sys_user/data")
+
     ###################################
     # Class attributes/constants      #
     ###################################

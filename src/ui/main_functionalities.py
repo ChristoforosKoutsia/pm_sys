@@ -2,9 +2,10 @@
 This module will contain class that implements base functionalities
 """
 from abc import ABC
+from functools import partial
 
 from PyQt6 import QtWidgets
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import QSize, Qt, QEasingCurve, QPropertyAnimation, QObject
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QSizePolicy, QComboBox, \
     QLineEdit
@@ -14,6 +15,8 @@ from pm_sys_user.src import user_objects
 def link_pages(button: QPushButton, page: QtWidgets.QWidget, stacked_widget: QStackedWidget):
     button.clicked.connect(lambda: stacked_widget.setCurrentWidget(page))
 
+def link_test(button: QPushButton):
+    button.clicked.connect(partial(print, "Hello world"))
 
 def create_frame(layout='vertical', parent_frame=""):
     '''

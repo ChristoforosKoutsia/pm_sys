@@ -5,6 +5,7 @@ import main_functionalities
 from PyQt6.QtWidgets import QApplication, QSizePolicy, QWidget, QHBoxLayout
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import Qt
+from functools import partial
 
 from menu_container import MenuContainer
 from main_container import MainContainer
@@ -32,6 +33,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         main_functionalities.link_pages(cont.push_button_entries, cont_2.page_entries, cont_2.main_menu_selection)
         main_functionalities.link_pages(cont.push_button_dashboard, cont_2.page_dashboard, cont_2.main_menu_selection)
+        cont.push_button_minimize.clicked.connect(partial(cont.toggle_left_bar))
         self.horizontalLayout.addWidget(cont.get_widget(), alignment=Qt.AlignmentFlag.AlignLeft)
         self.horizontalLayout.addWidget(cont_2.get_widget())
         self.setCentralWidget(self.centralwidget)

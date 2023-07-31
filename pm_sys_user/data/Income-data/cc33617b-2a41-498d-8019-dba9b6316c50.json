@@ -1,0 +1,10 @@
+{
+    "month": "JANUARY",
+    "income": 111.0,
+    "taxable_income": 1.0,
+    "created": "2023-07-31 16:23:35",
+    "is_active": true,
+    "is_deleted": false,
+    "modified": "2023-07-31 16:23:35",
+    "oid": "cc33617b-2a41-498d-8019-dba9b6316c50"
+}
