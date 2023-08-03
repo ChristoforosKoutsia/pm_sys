@@ -6,10 +6,12 @@ from functools import partial
 
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QSize, Qt, QEasingCurve, QPropertyAnimation, QObject
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QPixmap, QPainter, QColor
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QSizePolicy, QComboBox, \
     QLineEdit
 from pm_sys_user.src import user_objects
+from global_variables import GlobalVariables
+from custom_widgets import QPushButtonBrightDark
 
 
 def link_pages(button: QPushButton, page: QtWidgets.QWidget, stacked_widget: QStackedWidget):
@@ -45,7 +47,8 @@ def map_string_to_policy(key):
     return mapping_table[key]
 
 
-def add_button(layout, input_icon='', alignment='', text="", horizontal_policy='', vertical_policy=''):
+def add_button(layout, input_icon='', alignment='', text="", horizontal_policy='', vertical_policy='',
+               button_position=''):
     '''
     Args:
         vertical_policy:
@@ -54,15 +57,18 @@ def add_button(layout, input_icon='', alignment='', text="", horizontal_policy='
         alignment: alignment of the button in the given layout,
         layout: the layout that push_button will be imported
         input_icon: if push button have icon then the name of svg should be passed(e.g align-justify.svg)
+        button_position: Indicates button position on a vertical layout. It can be either 'alone', 'middle', 'top' or 'bottom'. '' is equal to 'alone'
 
     Returns:
         Created push button in given layout
     '''
-    push_button = QPushButton()
+    push_button = QPushButtonBrightDark(f"../../ui/img/feather/{input_icon}",f"../../ui/img/feather_dark/{input_icon}")
     if input_icon:
         icon = QIcon()
-
-        icon.addFile(f"../../ui/img/feather/{input_icon}")
+        if GlobalVariables.is_dark:
+            icon.addFile(push_button.dark_icon_file)
+        else:
+            icon.addFile(push_button.bright_icon_file)
         push_button.setIcon(icon)
         push_button.setIconSize(QSize(30, 30))
     push_button.setText(text)
@@ -73,6 +79,14 @@ def add_button(layout, input_icon='', alignment='', text="", horizontal_policy='
     if horizontal_policy in ['Minimum', 'Maximum', 'Fixed', 'Expanding']:
         sizePolicy = QSizePolicy(map_string_to_policy(horizontal_policy), map_string_to_policy(horizontal_policy))
         push_button.setSizePolicy(sizePolicy)
+    if button_position == 'top':
+        push_button.setStyleSheet("border-bottom-left-radius : 0; ")
+    elif button_position == 'bottom':
+        push_button.setStyleSheet("border-top-left-radius : 0; ")
+    elif button_position == 'middle':
+        push_button.setStyleSheet("border-bottom-left-radius : 0; border-top-left-radius : 0;")
+    # elif button_position == 'alone':
+        # pass
     return push_button
 
 
@@ -101,7 +115,6 @@ class ValidateInput:
                line_edit: The Qt object of line edit to deal with (e.g change its color or whatever)
            """
         self.value = None
-        print(type(input_class))
         self.input_class = input_class
         self.data_type = type(getattr(self.input_class,attribute_name))
         self.line_edit = line_edit

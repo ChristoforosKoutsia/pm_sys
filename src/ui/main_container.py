@@ -6,7 +6,7 @@ from functools import partial
 
 from PyQt6.QtCharts import QChart, QChartView, QPieSeries, QPieSlice
 from PyQt6.QtCore import Qt, QMargins
-from PyQt6.QtGui import QPainter, QBrush, QFont
+from PyQt6.QtGui import QPainter, QBrush, QFont, QColor
 
 from pm_sys_user.src import user_objects
 
@@ -16,7 +16,9 @@ from PyQt6.QtWidgets import QVBoxLayout, QStackedWidget, QWidget, QSizePolicy, Q
     QComboBox, QLabel, QLineEdit, QFrame, QHBoxLayout, QMessageBox
 
 from src.ui import main_functionalities
-from src.ui.custom_widgets import CustomMessageBox
+from src.ui.custom_widgets import CustomMessageBox, QToggle
+
+from global_variables import GlobalVariables
 
 
 class BaseEntriesDesign(ABC):
@@ -39,6 +41,7 @@ class BaseEntriesDesign(ABC):
         self.main_widget = None
         self.minimize_button = None
         self.add_entry_push_button = None
+        self.buttons = []
 
     def set_up(self, main_widget_name: str = ''):
         self.main_widget = QtWidgets.QWidget()
@@ -66,11 +69,16 @@ class BaseEntriesDesign(ABC):
         self.delete_button = add_button(frame_basic_operation.layout(), input_icon="trash-2.svg",
                                         horizontal_policy='Minimum')
         self.delete_button.setFixedSize(35, 35)
+        self.buttons = [self.add_button, self.edit_button, self.delete_button]
         frame_basic_operation.layout().addSpacing(900)
 
         # include in main_layout
         self.main_widget_layout.addWidget(frame_basic_operation)
         self.main_widget_layout.addWidget(frame_table)
+
+    def set_dark(self):
+        for item in self.buttons:
+            item.set_dark()
 
     def create_table(self):
 
@@ -83,7 +91,6 @@ class BaseEntriesDesign(ABC):
 
         # get all_objects from input class as a list
         all_objects = self.input_class.get()
-        print(all_objects)
 
         # flag that indicates that we entered for first time in columns for so we create once columns
         flag = False
@@ -101,7 +108,6 @@ class BaseEntriesDesign(ABC):
             flag = False
             if idx_row == 0: flag = True
             for idx_col, item in enumerate(cont.items()):
-                print(item)
                 if flag:
                     self.table_widget.insertColumn(idx_col)
 
@@ -114,7 +120,6 @@ class BaseEntriesDesign(ABC):
         # set column names
         try:
             headers = [i[0] for i in all_data_list[0].items()]
-            print(headers)
             for idx, h in enumerate(headers):
                 headers[idx] = user_objects.eng_2_greek[h]
             self.table_widget.setHorizontalHeaderLabels(headers)
@@ -191,8 +196,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     def add_item_in_table(self, table, data_dict: {}):
         rowPosition = self.table_widget.rowCount()
         colposition = self.table_widget.columnCount()
-        print(rowPosition)
-        print(colposition)
         idx_row = self.table_widget.rowCount()
         self.table_widget.insertRow(idx_row)
         for idx_col, item in enumerate(data_dict.items()):
@@ -557,12 +560,14 @@ class SuppliersPage(BaseEntriesDesign):
 
 class ChartCreator(QChart):
 
-    def __init__(self, datas, input_class,parent=None):
+    def __init__(self, datas, input_class, title='', parent=None):
         super(ChartCreator, self).__init__(parent)
+        self.slices = []
         self._datas = datas
-
         self.legend().hide()
-        self.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
+        self.title = title
+        self.setAnimationOptions(QChart.AnimationOption.AllAnimations)
+        # self.setAnimationDuration(500)
         self.input_class = input_class
         self.outer = QPieSeries()
         self.inner = QPieSeries()
@@ -572,7 +577,12 @@ class ChartCreator(QChart):
 
         self.set_outer_series()
         self.set_inner_series()
-
+        self.setTitle(self.title)
+        self.setTitleFont(QFont("Arial", 14))
+        if GlobalVariables.is_dark:
+            self.setTitleBrush(QColor("#d0d0dc"))
+        else:
+            self.setTitleBrush(QColor("#000000"))
         self.addSeries(self.outer)
         self.addSeries(self.inner)
 
@@ -591,20 +601,22 @@ class ChartCreator(QChart):
 
             slices.append(slice_)
             self.outer.append(slice_)
+            self.slices.append(slice_)
+            # Need this in order to be able to change their color when turning night mode off and on
 
         # label styling
         for slice_ in slices:
-            color = 'black'
-            # if slice_.percentage() > 0.1:
-            #     slice_.setLabelPosition(QPieSlice.LabelInsideHorizontal)
-            #     color = 'white'
-
-            label = "<p align='center' style='color:{}'>{}<br>{}%</p>".format(
-                color,
+            # Skipped the color parameter in order to keep the colors used by stylesheet
+            label = "<p align='center' >{}<br>{}%</p>".format(
+            # label = "<p align='center' style='color:{}'>{}<br>{}%</p>".format(
                 slice_.label(),
                 round(slice_.percentage() * 100, 2)
             )
             slice_.setLabel(label)
+            if GlobalVariables.is_dark:
+                slice_.setLabelColor(QColor("#d0d0dc"))
+            else:
+                slice_.setLabelColor(QColor("#000000"))
             slice_.hovered.connect(partial(self.explode, slice_))
             # slice_.setColor(data.secondary_color)
             # slice_.setBorderColor(data.secondary_color)
@@ -631,6 +643,16 @@ class ChartCreator(QChart):
         slice_.setExplodeDistanceFactor(0.1)
         slice_.setExploded(is_hovered)
 
+    def set_dark(self):
+        if GlobalVariables.is_dark:
+            self.setTitleBrush(QColor("#d0d0dc"))
+            for sl in self.slices:
+                sl.setLabelColor(QColor("#d0d0dc"))
+        else:
+            self.setTitleBrush(QColor("#000000"))
+            for sl in self.slices:
+                sl.setLabelColor(QColor("#000000"))
+
 
 class Pages:
     """
@@ -639,9 +661,9 @@ class Pages:
 
     def __init__(self):
         super().__init__()
-        self.page_incomes = None
-        self.page_expenses = None
-        self.page_employees = None
+        self.page_incomes_widget = None
+        self.page_expenses_widget = None
+        self.page_employees_widget = None
         self.entries_stacked_widget = None
         self.push_button_employees = None
         self.push_button_incomes = None
@@ -669,22 +691,26 @@ class Pages:
         central_container_frame = create_frame("horizontal")
         self.entries_stacked_widget = QStackedWidget()
 
-        # create pages
-        self.page_incomes = IncomesPage().get_widget()
-        self.page_expenses = ExpensesPage().get_widget()
-        self.page_employees = EmployeesPage().get_widget()
+        # create pages and widgets
+        self.page_incomes = IncomesPage()
+        self.page_expenses = ExpensesPage()
+        self.page_employees = EmployeesPage()
+
+        self.page_incomes_widget = self.page_incomes.get_widget()
+        self.page_expenses_widget = self.page_expenses.get_widget()
+        self.page_employees_widget = self.page_employees.get_widget()
 
         # add pages to stacked_widget
-        self.entries_stacked_widget.addWidget(self.page_incomes)
-        self.entries_stacked_widget.addWidget(self.page_expenses)
-        self.entries_stacked_widget.addWidget(self.page_employees)
+        self.entries_stacked_widget.addWidget(self.page_incomes_widget)
+        self.entries_stacked_widget.addWidget(self.page_expenses_widget)
+        self.entries_stacked_widget.addWidget(self.page_employees_widget)
 
         # link push buttons to pages
-        main_functionalities.link_pages(self.push_button_expenses, self.page_expenses,
+        main_functionalities.link_pages(self.push_button_expenses, self.page_expenses_widget,
                                         self.entries_stacked_widget)
-        main_functionalities.link_pages(self.push_button_incomes, self.page_incomes,
+        main_functionalities.link_pages(self.push_button_incomes, self.page_incomes_widget,
                                         self.entries_stacked_widget)
-        main_functionalities.link_pages(self.push_button_employees, self.page_employees,
+        main_functionalities.link_pages(self.push_button_employees, self.page_employees_widget,
                                         self.entries_stacked_widget)
         # add stacked widget to frame
         central_container_frame.layout().addWidget(self.entries_stacked_widget)
@@ -692,39 +718,61 @@ class Pages:
 
         return page_widget
 
+
     def page_dashboard_set_up(self):
         # define datas
         page_widget = QWidget()
         my_datas = user_objects.Expense.get()
-        chart = ChartCreator(my_datas,"Expense")
-        chart.setTitle("Έξοδα")
-        title = chart.title()
+        self.expense_chart = ChartCreator(my_datas,"Expense", 'Έξοδα')
+        print(self.expense_chart.theme())
+        # self.expense_chart.setTheme(QChart.ChartTheme.ChartThemeBlueCerulean)
+        # title = self.expense_chart.title()
 
-        chart.setTitleBrush(QBrush(Qt.GlobalColor.white))
-        chart.setTitleFont(QFont("Arial", 14))
-        chart.setMargins(QMargins(0, 0, 0, 150))
-        chart.setBackgroundVisible(False)
-        chart_view_expenses = QChartView(chart)
+        # self.expense_chart.setTitleBrush(QBrush(Qt.GlobalColor))
+        self.expense_chart.setTitleFont(QFont("Arial", 14))
+        self.expense_chart.setMargins(QMargins(0, 0, 0, 50))
+        self.expense_chart.setBackgroundVisible(False)
+        chart_view_expenses = QChartView(self.expense_chart)
         chart_view_expenses.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         page_widget = QWidget()
         my_datas = user_objects.Income.get()
-        chart = ChartCreator(my_datas,"Income")
-        chart.setTitle("Έσοδα")
-        title = chart.title()
+        self.income_chart = ChartCreator(my_datas, "Income", 'Εσοδα')
+        # title = self.income_chart.title()
 
-        chart.setTitleBrush(QBrush(Qt.GlobalColor.white))
-        chart.setTitleFont(QFont("Arial", 14))
-        chart.setMargins(QMargins(0, 0, 0, 150))
-        chart.setBackgroundVisible(False)
-        chart_view_incomes = QChartView(chart)
+        # chart.setTitleBrush(QBrush(Qt.GlobalColor.white))
+        self.income_chart.setMargins(QMargins(0, 0, 0, 50))
+        self.income_chart.setBackgroundVisible(False)
+        chart_view_incomes = QChartView(self.income_chart)
         chart_view_incomes.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        page_layout = QHBoxLayout(page_widget)
+        full_page_layout = QVBoxLayout()
+        page_label = QLabel("Αρχική Σελίδα")
+        page_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        full_page_layout.setSpacing(30)
+        font = QFont("Arial", 26)
+        page_label.setFont(font)
+        full_page_layout.addWidget(page_label)
+        page_layout = QHBoxLayout()
         page_layout.addWidget(chart_view_expenses)
         page_layout.addWidget(chart_view_incomes)
+        full_page_layout.addLayout(page_layout)
 
-        return page_widget
+        full_page_widget = QWidget()
+        full_page_widget.setLayout(full_page_layout)
+        return full_page_widget
+
+    def set_dark(self):
+        """
+        Sets everything to dark or bright mode based on global state of is_dark
+
+        Returns: void
+        """
+        self.expense_chart.set_dark()
+        self.income_chart.set_dark()
+        self.page_incomes.set_dark()
+        self.page_expenses.set_dark()
+        self.page_employees.set_dark()
 
 
 class MainContainer:
@@ -744,10 +792,11 @@ class MainContainer:
         self.main_menu_selection = None
         self.main_layout = None
         self.main_container = None
+        self.pages_obj = None
 
     def set_up(self):
         # create instance of pages
-        pages_obj = Pages()
+        self.pages_obj = Pages()
         self.main_container = QtWidgets.QWidget()
         self.main_container.setObjectName("main_container")
 
@@ -758,9 +807,9 @@ class MainContainer:
         self.main_menu_selection = QStackedWidget(self.main_container)
 
         # create corresponding pages
-        self.page_dashboard = pages_obj.page_dashboard_set_up()
+        self.page_dashboard = self.pages_obj.page_dashboard_set_up()
 
-        self.page_entries = pages_obj.page_entries()
+        self.page_entries = self.pages_obj.page_entries()
         # self.page_entries = ExpensesPage().get_widget()
         self.page_user = QWidget()
         self.page_settings = QWidget()
@@ -775,6 +824,14 @@ class MainContainer:
 
         # include in main_layout
         self.main_layout.addWidget(self.main_menu_selection)
+
+    def set_dark(self):
+        """
+        Sets everything to dark or bright mode based on global state of is_dark
+
+        Returns: void
+        """
+        self.pages_obj.set_dark()
 
     def get_widget(self):
         return self.main_container

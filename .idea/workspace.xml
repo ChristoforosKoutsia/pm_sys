@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d812591a-793b-45df-a15b-fbb8ee1d2374" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/pm_sys.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pm_sys.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cfg/styles_light.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demos/change_svg_color.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ui/global_variables.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ui/settings_container.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pm_sys_user/src/user_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/pm_sys_user/src/user_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cfg/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/cfg/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/custom_widgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/custom_widgets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/main_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/main_container.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/main_functionalities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/main_functionalities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/main_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/main_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/mainwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/mainwindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/menu_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/menu_container.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,8 +25,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Python Unit Test" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -37,20 +41,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/PycharmProjects/pm_sys&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/HP/PycharmProjects/python_tests",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\HP\PycharmProjects\pm_sys\cfg" />
       <recent name="C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\HP\PycharmProjects\pm_sys\ui\img" />
       <recent name="C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\ui" />
       <recent name="C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\pm_sys_user\src" />
       <recent name="C:\Users\billk\OneDrive\Documents\GitHub\pm_sys\src\ui_py" />

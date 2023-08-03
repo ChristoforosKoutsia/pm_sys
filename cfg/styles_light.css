@@ -1,0 +1,73 @@
+*{
+padding :0;
+border : none;
+margin : 0;
+background : none;
+background-color : transparent;
+color : #000000
+}
+
+#centralwidget{
+	background-color: #f2f6ff;
+    radius : 12px
+}
+#leftMenuContainer{
+	background-color: #b0c4cf;
+}
+
+#rightMenuContainer{
+    background-color: #b0c4cf;
+}
+
+#leftMenuContainer QPushButton{
+text-align:left;
+padding:15px;
+border-top-left-radius :10px;
+border-bottom-left-radius : 10px;
+background-color: #97acb8;
+color: #000000
+
+}
+
+#leftMenuContainer QPushButton:hover
+{
+    background-color: #b8e3ff;
+    cursor :pointer ;
+}
+
+#main_container QPushButton{
+text-align:center;
+padding:10px ,10px ;
+border-radius: 10px;
+background-color: #97acb8;
+color: #000000
+}
+
+#frame_8 QPushButton{
+text-align:center;
+padding:5px ;
+border-top-left-radius :0px;
+border-bottom-left-radius : 0px;
+border-top-right-radius :0px;
+border-bottom-right-radius : 0px;
+background-color: #97acb8;
+color: #000000
+}
+
+#pushButtonMinimize QPushButton{
+    background-color: #f00000;
+    background-image: url('./alert_octagon.svg');
+}
+
+
+QLineEdit {
+ border: 1px solid white;
+}
+
+QComboBox {
+ border: 1px solid white;
+
+}
+
+
+

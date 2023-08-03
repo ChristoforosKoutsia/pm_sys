@@ -1,17 +1,22 @@
 *{
-padding :0;
-border : none;
-margin : 0;
-background : none;
-background-color : transparent;
-color : #fff
+    padding :0;
+    border : none;
+    margin : 0;
+    background : none;
+    background-color : transparent;
+    color : #d0d0dc;
 }
 
 #centralwidget{
 	background-color: #1f232a;
-radius : 12px
+    radius : 12px
 }
+
 #leftMenuContainer{
+	background-color: #16191d;
+}
+
+#rightMenuContainer{
 	background-color: #16191d;
 }
 
@@ -48,7 +53,7 @@ border-top-left-radius :0px;
 border-bottom-left-radius : 0px;
 border-top-right-radius :0px;
 border-bottom-right-radius : 0px;
-background-color: #rgb(171, 171, 171);
+background-color: #ababab;
 }
 
 
